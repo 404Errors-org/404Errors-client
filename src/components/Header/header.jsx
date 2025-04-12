@@ -1,5 +1,5 @@
 import React from "react";
-import { HeaderContainer, LoginBtn, NavItem, Link, NavList, Wrapper } from "./header.styled";
+import { HeaderContainer, NavItem, Link, NavList, Wrapper } from "./header.styled";
 import Map from "../map/map";
 
 

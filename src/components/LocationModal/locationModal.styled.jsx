@@ -17,6 +17,7 @@ export const ModalTitle = styled.h3`
     color: ${props => props.theme.colors.primaryDark};
     display: flex;
     align-items: center;
+    margin-top: ${props => props.marginTop || '0'};
 `
 
 export const CloseBtn = styled.button`

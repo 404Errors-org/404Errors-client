@@ -136,7 +136,7 @@ const Map = ({ selectedCategories }) => {
         mapInstance.current.remove();
       }
     };
-  }, [mapboxAccessToken]);
+  }, [mapboxAccessToken, changeSelectLocation]);
 
   useEffect(() => {
     if (mapLoaded && mapInstance.current) {
