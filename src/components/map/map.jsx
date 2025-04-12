@@ -16,7 +16,7 @@ const Map = ({ selectedCategories }) => {
   const mapboxAccessToken = process.env.REACT_APP_API_KEY;
   const mapInstance = useRef(null);
 
-  const buildRoute =  useCallback(() => {
+  const buildRoute = useCallback(() => {
     if (startCoordsRef.current && endCoordsRef.current) {
       const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/walking/${startCoordsRef.current[0]},${startCoordsRef.current[1]};${endCoordsRef.current[0]},${endCoordsRef.current[1]}?geometries=geojson&access_token=${mapboxAccessToken}`;
 
@@ -52,7 +52,7 @@ const Map = ({ selectedCategories }) => {
           }
         });
     }
-  });
+  }, [mapboxAccessToken]);
 
   useEffect(() => {
     mapboxgl.accessToken = mapboxAccessToken;
@@ -136,7 +136,7 @@ const Map = ({ selectedCategories }) => {
         mapInstance.current.remove();
       }
     };
-  }, [mapboxAccessToken, changeSelectLocation]);
+  }, [mapboxAccessToken]);
 
   useEffect(() => {
     if (mapLoaded && mapInstance.current) {
