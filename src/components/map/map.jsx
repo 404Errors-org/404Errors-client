@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Box } from "./map.styled";
 import mapboxgl from "mapbox-gl";
 import FieldsForRoutes from "../FieldsForRoutes/fieldsForRoutes";
@@ -16,7 +16,7 @@ const Map = ({ selectedCategories }) => {
   const mapboxAccessToken = process.env.REACT_APP_API_KEY;
   const mapInstance = useRef(null);
 
-  const buildRoute = () => {
+  const buildRoute =  useCallback(() => {
     if (startCoordsRef.current && endCoordsRef.current) {
       const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/walking/${startCoordsRef.current[0]},${startCoordsRef.current[1]};${endCoordsRef.current[0]},${endCoordsRef.current[1]}?geometries=geojson&access_token=${mapboxAccessToken}`;
 
@@ -52,7 +52,7 @@ const Map = ({ selectedCategories }) => {
           }
         });
     }
-  };
+  });
 
   useEffect(() => {
     mapboxgl.accessToken = mapboxAccessToken;
