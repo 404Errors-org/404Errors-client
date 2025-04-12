@@ -56,7 +56,7 @@ export const ForgotPassword = styled.a`
     cursor: pointer;
 `
 
-export const ErorrText = styled.p`
+export const ErrorText = styled.p`
     font-size: 14px;
     font-weight: 400;
     color: ${props => props.theme.colors.primaryDark};
