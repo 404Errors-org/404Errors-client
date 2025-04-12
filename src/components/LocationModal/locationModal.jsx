@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Checkbox,
   CloseBtn,
@@ -9,6 +9,7 @@ import {
   Modal,
   ModalTitle,
 } from "./locationModal.styled";
+import { useSearchParams } from 'react-router-dom';
 
 const LocationModal = ({ onChangeLocation, onCategoryChange, initialSelectedCategories }) => {
   const categories = [
@@ -26,23 +27,61 @@ const LocationModal = ({ onChangeLocation, onCategoryChange, initialSelectedCate
     { value: "electricshop", label: "Електроніка" },
   ];
 
+  const filters = [
+    { value: "ramp", label: "Пандуси" },
+    { value: "entrance", label: "Широкий вхід" },
+    { value: "toilet", label: "Туалети" },
+    { value: "tactile", label: "Для сліпих" },
+    { value: "movement", label: "Вільне пересування" },
+  ]
+
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     setSelectedCategories(initialSelectedCategories || []);
   }, [initialSelectedCategories]);
 
-  const handleCheckboxChange = (value) => {
+  const handlePlaces = (value) => {
     setSelectedCategories((prevSelected) => {
-      const newSelected = prevSelected.includes(value)
+      const newPlaces = prevSelected.includes(value)
         ? prevSelected.filter((category) => category !== value)
         : [...prevSelected, value];
 
-      onCategoryChange(newSelected);
+        onCategoryChange(newPlaces);
 
-      return newSelected;
+      return newPlaces;
     });
   };
+  
+  const handleFilters = useCallback((value) => {
+    setSelectedFilters((prevSelected) => {
+      const newFilters = prevSelected.includes(value)
+        ? prevSelected.filter((filter) => filter !== value)
+        : [...prevSelected, value];
+  
+      const params = new URLSearchParams(searchParams);
+      if (newFilters.length > 0) {
+        params.set('filters', newFilters.join(','));
+      } else {
+        params.delete('filters');
+      }
+  
+      setSearchParams(params);
+  
+      return newFilters;
+    });
+  }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
+    const filtersFromQuery = searchParams.get('filters');
+    if (filtersFromQuery) {
+      setSelectedFilters(filtersFromQuery.split(','));
+    } else {
+      setSelectedFilters([]);
+    }
+  }, [searchParams]);
 
   return (
     <Modal>
@@ -56,7 +95,7 @@ const LocationModal = ({ onChangeLocation, onCategoryChange, initialSelectedCate
             <Checkbox
               type="checkbox"
               checked={selectedCategories.includes(category.value)}
-              onChange={() => handleCheckboxChange(category.value)}
+              onChange={() => handlePlaces(category.value)}
             />
             <CustomCheckbox />
             <img
@@ -66,6 +105,26 @@ const LocationModal = ({ onChangeLocation, onCategoryChange, initialSelectedCate
               height="20px"
             />
             {category.label}
+          </Label>
+        ))}
+      </LocationList>
+      <ModalTitle marginTop='18px'>Додаткові фільтри</ModalTitle>
+      <LocationList>
+        {filters.map((filter) => (
+          <Label key={filter.value}>
+            <Checkbox
+              type="checkbox"
+              checked={selectedFilters.includes(filter.value)}
+              onChange={() => handleFilters(filter.value)}
+            />
+            <CustomCheckbox />
+            <img
+              src={`/icons/${filter.value}.svg`}
+              alt={`${filter.label} icon`}
+              width="20px"
+              height="20px"
+            />
+            {filter.label}
           </Label>
         ))}
       </LocationList>
