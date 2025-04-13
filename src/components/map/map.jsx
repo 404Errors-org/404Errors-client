@@ -3,18 +3,36 @@ import { Box } from "./map.styled";
 import mapboxgl from "mapbox-gl";
 import FieldsForRoutes from "../FieldsForRoutes/fieldsForRoutes";
 import { usePlace } from "../../context/placeContext";
+import { useFilters } from "../../context/filtersContext";
 
-const Map = ({ selectedCategories }) => {
+const Map = () => {
   const { changeSelectLocation } = usePlace();
+  const { locations, selectedCategories } = useFilters();
+
   const [startLocation, setStartLocation] = useState("");
   const [endLocation, setEndLocation] = useState("");
   const [mapLoaded, setMapLoaded] = useState(false);
+
   const startCoordsRef = useRef(null);
   const endCoordsRef = useRef(null);
   const mapRef = useRef();
   const mapContainerRef = useRef();
   const mapboxAccessToken = process.env.REACT_APP_API_KEY;
   const mapInstance = useRef(null);
+  const categoryValues = [
+    "restaurant",
+    "hotel",
+    "foodmarket",
+    "hospital",
+    "park",
+    "entertaiment",
+    "museum",
+    "pharmacy",
+    "fuel",
+    "bank",
+    "postoffice",
+    "electricshop",
+  ];
 
   const buildRoute = useCallback(() => {
     if (startCoordsRef.current && endCoordsRef.current) {
@@ -70,6 +88,14 @@ const Map = ({ selectedCategories }) => {
       map.on("load", () => {
         setMapLoaded(true);
 
+        map.loadImage("/images/pin.png", (error, image) => {
+          if (error) throw error;
+
+          if (!map.hasImage("pin-icon")) {
+            map.addImage("pin-icon", image);
+          }
+        });
+
         const imageArray = [
           { url: "/images/restaurant.png", name: "restaurant-icon" },
           { url: "/images/hotel.png", name: "hotel-icon" },
@@ -100,7 +126,7 @@ const Map = ({ selectedCategories }) => {
           const coordinates = e.features[0].geometry.coordinates;
 
           const updatedProperties = {
-            ...properties,          
+            ...properties,
             coordinate: coordinates,
           };
 
@@ -112,7 +138,7 @@ const Map = ({ selectedCategories }) => {
             const features = map.queryRenderedFeatures(e.point, {
               layers: ["accessible-places-layer"],
             });
-            
+
             if (features.length > 0) {
               return;
             }
@@ -142,42 +168,57 @@ const Map = ({ selectedCategories }) => {
     if (mapLoaded && mapInstance.current) {
       const map = mapInstance.current;
 
-      if (map.getLayer("accessible-places-layer")) {
-        map.removeLayer("accessible-places-layer");
-      }
-      if (map.getSource("accessible-places")) {
-        map.removeSource("accessible-places");
-      }
+      const removeExistingLayerAndSource = () => {
+        if (map.getLayer("accessible-places-layer")) {
+          map.removeLayer("accessible-places-layer");
+        }
+        if (map.getSource("accessible-places")) {
+          map.removeSource("accessible-places");
+        }
+      };
 
-      if (selectedCategories.length === 0) {
-        return;
+      const addLayerToMap = () => {
+        if (!locations || !locations.features?.length) {
+          return;
+        }
+
+        map.addSource("accessible-places", {
+          type: "geojson",
+          data: locations,
+        });
+
+        map.addLayer({
+          id: "accessible-places-layer",
+          type: "symbol",
+          source: "accessible-places",
+          layout: {
+            "icon-image": [
+              "match",
+              ["get", "category"],
+              ...(selectedCategories && selectedCategories.length > 0 ? selectedCategories : categoryValues).reduce(
+                (acc, category) => {
+                  acc.push(category, `${category}-icon`);
+                  return acc;
+                },
+                []
+              ),
+              "pin-icon",
+            ],
+            "icon-allow-overlap": true,
+            "icon-size": 0.07,
+          },
+        });
+      };
+
+      removeExistingLayerAndSource();
+
+      if (map.isStyleLoaded()) {
+        addLayerToMap();
+      } else {
+        map.once("styledata", addLayerToMap);
       }
-
-      map.addSource("accessible-places", {
-        type: "geojson",
-        data: "/points.json",
-      });
-
-      map.addLayer({
-        id: "accessible-places-layer",
-        type: "symbol",
-        source: "accessible-places",
-        layout: {
-          "icon-image": [
-            "match",
-            ["get", "category"],
-            ...selectedCategories.reduce((acc, category) => {
-              acc.push(category, `${category}-icon`);
-              return acc;
-            }, []),
-            "custom-icon",
-          ],
-          "icon-allow-overlap": true,
-          "icon-size": 0.07,
-        },
-      });
     }
-  }, [selectedCategories, mapLoaded]);
+  }, [locations, mapLoaded]);
 
   const handleClear = () => {
     startCoordsRef.current = null;
@@ -191,8 +232,6 @@ const Map = ({ selectedCategories }) => {
       mapInstance.current.removeSource("route");
     }
   };
-
-  
 
   return (
     <Box>
