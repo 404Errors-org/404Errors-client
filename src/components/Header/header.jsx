@@ -1,10 +1,9 @@
 import React from "react";
 import { HeaderContainer, LoginBtn, NavItem, Link, NavList, Wrapper } from "./header.styled";
 import Map from "../map/map";
-
 import { useAuth } from "../../context/authContext";
 
-const Header = ({onLocationClick, selectedCategories }) => {
+const Header = ({ onLocationClick }) => {
     const { user, isLoggedIn, logout } = useAuth();
     return(
       <>
@@ -19,8 +18,7 @@ const Header = ({onLocationClick, selectedCategories }) => {
             </NavList>
         </HeaderContainer>
 
-        <Map selectedCategories={selectedCategories} />
-
+        {/* <Map /> */}
       </>
     )
 }
