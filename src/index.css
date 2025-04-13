@@ -1,18 +1,21 @@
 @import-normalize;
 
-h1, h2, h3, p{
+h1,
+h2,
+h3,
+p {
   margin: 0;
 }
 
-body{
-  font-family: 'Open Sans';
+body {
+  font-family: "Open Sans";
   height: 100%;
   overflow: hidden;
   margin: 0;
 }
 
-.mapboxgl-ctrl-geocoder--input{
-  border: 1px solid #7CCDCD;
+.mapboxgl-ctrl-geocoder--input {
+  border: 1px solid #7ccdcd;
   padding: 8px 12px;
   padding-left: 43px;
   margin-bottom: 10px;
@@ -20,15 +23,13 @@ body{
   font-size: 16px;
   font-weight: 400;
   color: rgba(38, 38, 38, 0.5);
-
-  
 }
 
-.mapboxgl-ctrl-geocoder--input:focus{
-  outline: 2px solid #7CCDCD;
+.mapboxgl-ctrl-geocoder--input:focus {
+  outline: 2px solid #7ccdcd;
 }
 
-.mapboxgl-ctrl-geocoder--pin-right{
+.mapboxgl-ctrl-geocoder--pin-right {
   display: none;
 }
 
@@ -36,31 +37,52 @@ body{
   display: none;
 }
 
-.mapboxgl-ctrl-geocoder{
+.mapboxgl-ctrl-geocoder {
   display: flex;
   flex-direction: column;
 }
 
-.css-3zorqg:not(:last-child){
+.css-3zorqg:not(:last-child) {
   margin-bottom: 10px;
 }
 
-.point .mapboxgl-ctrl-geocoder--input{
-  background: url('../public/icons/location-search.svg') no-repeat 12px center, #FFFFFF;
+.point .mapboxgl-ctrl-geocoder--input {
+  background: url("../public/icons/location-search.svg") no-repeat 12px center, #ffffff;
   background-size: 18px;
 }
 
-.search .mapboxgl-ctrl-geocoder--input{
-  background: url('../public/icons/search.svg') no-repeat 12px center, #FFFFFF;
+.search .mapboxgl-ctrl-geocoder--input {
+  background: url("../public/icons/search.svg") no-repeat 12px center, #ffffff;
   background-size: 18px;
 }
 
-.suggestions-wrapper{
-  background-color: #FFFFFF;
+.suggestions-wrapper {
+  background-color: #ffffff;
   margin-bottom: 5px;
   border-radius: 5px;
 }
 
-.suggestions{
+.suggestions {
   margin-block: 10px;
+}
+
+:root {
+  --rt-color-white: #fff;
+  --rt-color-dark: #026c6c;
+  --rt-color-success: #8dc572;
+  --rt-color-error: #ff6370;
+  --rt-color-warning: #ffca64;
+  --rt-color-info: #7ccdcd;
+}
+
+.react-tooltip {
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.react-tooltip-arrow {
+  background-color: transparent !important;
 }

@@ -40,7 +40,7 @@ export const HeadWrapper = styled.div`
 export const LocationList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 2fr);
-  row-gap: 28px;
+  row-gap: 12px;
   column-gap: 52px;
   margin-top: 18px;
 `;
@@ -84,4 +84,11 @@ export const CustomCheckbox = styled.span`
     transition: transform 0.2s ease;
     border-radius: 2px;
   }
+`;
+
+export const StarContainer = styled.div` 
+  display: flex; 
+  justify-content: center; /* Центруємо зірки по горизонталі */ 
+  gap: 5px; /* Відступ між зірками */ 
+  margin: 10px 0; /* Відступи зверху та знизу */ 
 `;

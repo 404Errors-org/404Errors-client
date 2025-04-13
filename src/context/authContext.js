@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
+    if (storedUser && storedUser.token) {
       setUser(storedUser);
       setIsLoggedIn(true);
     }
@@ -20,9 +20,11 @@ export const AuthProvider = ({ children }) => {
   const login = async (code) => {
     try {
       const response = await loginConfirm(code);
-      const { user } = response;
-      setUser(user);
+      const { token, user } = response;
+      const userWithToken = { ...user, token };
+      setUser(userWithToken);
       setIsLoggedIn(true);
+      localStorage.setItem("user", JSON.stringify(userWithToken));
     } catch (error) {
       console.error("Помилка логіну:", error.message);
       throw error;
@@ -32,9 +34,11 @@ export const AuthProvider = ({ children }) => {
   const register = async (code) => {
     try {
       const response = await registerConfirm(code);
-      const { user } = response;
-      setUser(user);
+      const { token, user } = response;
+      const userWithToken = { ...user, token };
+      setUser(userWithToken);
       setIsLoggedIn(true);
+      localStorage.setItem("user", JSON.stringify(userWithToken));
     } catch (error) {
       console.error("Помилка реєстрації:", error.message);
       throw error;

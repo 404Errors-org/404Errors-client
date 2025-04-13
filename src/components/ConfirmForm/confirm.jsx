@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import PropTypes from "prop-types";
+import { Tooltip } from "react-tooltip";
 
 const FormError = ({ name }) => {
   return <ErrorMessage name={name} render={(messsage) => <ErrorText>{messsage}</ErrorText>} />;
@@ -15,7 +16,7 @@ FormError.propTypes = {
 };
 
 const schema = yup.object().shape({
-  code: yup.string().required("Код обов’язковий").length(6, "Код повинен містити рівно 6 символів"),
+  code: yup.string().required("Код обов'язковий").length(6, "Код повинен містити рівно 6 символів"),
 });
 
 const ConfirmForm = ({ type }) => {
@@ -41,6 +42,7 @@ const ConfirmForm = ({ type }) => {
   return (
     <FormWrapper marginTop="140px">
       <TitleForm>Введіть код підтвердження</TitleForm>
+
       <Formik
         initialValues={{
           code: "",
@@ -48,13 +50,27 @@ const ConfirmForm = ({ type }) => {
         onSubmit={handleSubmit}
         validationSchema={schema}
       >
-        {({ isValid, touched }) => (
+        {({ touched, values }) => (
           <FormContainer>
-            <Input name="code" placeholder="Код з email" />
+            <Input name="code" placeholder="Код з email" data-tooltip-id="code-tooltip" />
+            <Tooltip id="code-tooltip" content="Введіть 6-значний код із листа" place="bottom" />
             <FormError name="code" />
-            <ButtonSubmit type="submit" disabled={!isValid || Object.keys(touched).length === 0}>
+            <ButtonSubmit
+              type="submit"
+              disabled={!values.code || values.code.length !== 6}
+              data-tooltip-id="confirm-button-tooltip"
+            >
               Підтвердити
             </ButtonSubmit>
+            <Tooltip
+              id="confirm-button-tooltip"
+              content={
+                !values.code || values.code.length !== 6
+                  ? "Введіть 6-значний код для продовження"
+                  : "Натисніть для підтвердження"
+              }
+              place="bottom"
+            />
           </FormContainer>
         )}
       </Formik>
