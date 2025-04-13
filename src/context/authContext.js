@@ -5,58 +5,52 @@ import { registerConfirm } from "../services/register";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem("user"));
-        if (storedUser) {
-            setUser(storedUser);
-            setIsLoggedIn(true);
-        }
-    }, []);
-
-    const login = async (code) => {
-        try {
-            const response = await loginConfirm(code);
-            const { token, user } = response;
-            console.log(token)
-            setUser(user);
-            setIsLoggedIn(true);
-        } catch (error) {
-            console.error("Помилка логіну:", error.message);
-            throw error;
-        }
-    };
-
-    const register = async (code) => {
-        try {
-            const response = await registerConfirm(code);
-            const { token, user } = response;
-            console.log(token)
-            setUser(user);
-            setIsLoggedIn(true);
-        } catch (error) {
-            console.error("Помилка реєстрації:", error.message);
-            throw error;
-        }
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+      setIsLoggedIn(true);
     }
+  }, []);
 
-    const logout = () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        setUser(null);
-        setIsLoggedIn(false);
-    };
+  const login = async (code) => {
+    try {
+      const response = await loginConfirm(code);
+      const { token, user } = response;
+      setUser(user);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error("Помилка логіну:", error.message);
+      throw error;
+    }
+  };
 
-    return (
-        <AuthContext.Provider value={{ user, isLoggedIn, login, register, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  const register = async (code) => {
+    try {
+      const response = await registerConfirm(code);
+      const { token, user } = response;
+      setUser(user);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error("Помилка реєстрації:", error.message);
+      throw error;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    setUser(null);
+    setIsLoggedIn(false);
+  };
+
+  return <AuthContext.Provider value={{ user, isLoggedIn, login, register, logout }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
-    return useContext(AuthContext);
+  return useContext(AuthContext);
 };
