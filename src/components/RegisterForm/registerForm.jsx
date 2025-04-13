@@ -92,71 +92,98 @@ const RegisterForm = () => {
           >
             {({ isValid, setFieldValue, values }) => (
               <FormContainer>
-                <Input name="email" placeholder="Емейл " />
-                <FormError name="email" />
-                <Input name="name" placeholder="Ім’я користувача" />
-                <FormError name="name" />
-                <Input name="password" placeholder="Пароль" type="password" />
-                <FormError name="password" />
-                <Input name="repeatPassword" placeholder="Повторіть пароль " type="password" />
-                <FormError name="repeatPassword" />
+              <Input 
+                name="email" 
+                placeholder="Емейл " 
+                aria-label="Емейл" 
+                aria-required="true"
+              />
+              <FormError name="email" />
+              <Input 
+                name="name" 
+                placeholder="Ім’я користувача" 
+                aria-label="Ім’я користувача" 
+                aria-required="true"
+              />
+              <FormError name="name" />
+              <Input 
+                name="password" 
+                placeholder="Пароль" 
+                type="password" 
+                aria-label="Пароль" 
+                aria-required="true"
+              />
+              <FormError name="password" />
+              <Input 
+                name="repeatPassword" 
+                placeholder="Повторіть пароль " 
+                type="password" 
+                aria-label="Повторіть пароль" 
+                aria-required="true"
+              />
+              <FormError name="repeatPassword" />
 
-                <div style={{ margin: "20px 0" }}>
-                  <label
+              <div style={{ margin: "20px 0" }}>
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                  }}
+                  aria-label="Прикріпіть документ про інвалідність"
+                >
+                  <Field
+                    type="checkbox"
+                    name="isDisabled"
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      fontSize: "16px",
+                      width: "20px",
+                      height: "20px",
+                      accentColor: "#007BFF",
                       cursor: "pointer",
                     }}
-                  >
-                    <Field
-                      type="checkbox"
-                      name="isDisabled"
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        accentColor: "#007BFF",
-                        cursor: "pointer",
+                    aria-checked={values.isDisabled ? "true" : "false"}
+                    aria-labelledby="checkbox-label"
+                  />
+                  Прикріпіть документ про інвалідність
+                </label>
+
+                {values.isDisabled && (
+                  <div style={{ marginTop: "15px" }}>
+                    <input
+                      type="file"
+                      name="disabilityFile"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(event) => {
+                        const file = event.currentTarget.files[0];
+                        setFieldValue("disabilityFile", file);
+                        setIsFileSelected(!!file);
                       }}
+                      style={{
+                        fontSize: "16px",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: `1px solid ${isFileSelected ? "#00bcd4" : "#ccc"}`,
+                      }}
+                      aria-label="Прикріпіть документ"
+                      aria-required={values.isDisabled ? "true" : "false"}
                     />
-                    Прикріпіть документ про інвалідність
-                  </label>
+                    <FormError name="disabilityFile" />
+                  </div>
+                )}
+              </div>
 
-                  {values.isDisabled && (
-                    <div style={{ marginTop: "15px" }}>
-                      <input
-                        type="file"
-                        name="disabilityFile"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={(event) => {
-                          const file = event.currentTarget.files[0];
-                          setFieldValue("disabilityFile", file);
-                          setIsFileSelected(!!file);
-                        }}
-                        style={{
-                          fontSize: "16px",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: `1px solid ${isFileSelected ? "#00bcd4" : "#ccc"}`,
-                        }}
-                      />
-                      <FormError name="disabilityFile" />
-                    </div>
-                  )}
-                </div>
-
-                <ButtonSubmit type="submit" disabled={!isValid}>
-                  Зареєструватися
-                </ButtonSubmit>
-              </FormContainer>
-            )}
-          </Formik>
-        </FormWrapper>
-      )}
-    </>
-  );
+              <ButtonSubmit type="submit" disabled={!isValid} aria-disabled={!isValid}>
+                Зареєструватися
+              </ButtonSubmit>
+            </FormContainer>
+          )}
+        </Formik>
+      </FormWrapper>
+    )}
+  </>
+);
 };
 
 export default RegisterForm;

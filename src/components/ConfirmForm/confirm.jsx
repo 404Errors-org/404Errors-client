@@ -40,8 +40,8 @@ const ConfirmForm = ({type}) => {
         }
     };
     return(
-        <FormWrapper marginTop='140px'>
-            <TitleForm>Введіть код підтвердження</TitleForm>
+        <FormWrapper marginTop='140px' role="form" aria-labelledby="form-title">
+            <TitleForm id="form-title">Введіть код підтвердження</TitleForm>
             <Formik 
             initialValues={{
                 code:''}}
@@ -49,7 +49,10 @@ const ConfirmForm = ({type}) => {
             validationSchema={schema}>
                 {({ isValid, touched }) => (
                     <FormContainer>
-                        <Input name="code" placeholder="Код з email"/>
+                        <Input 
+                            name="code" 
+                            placeholder="Код з email" 
+                            aria-describedby="code-error"/>
                         <FormError name="code"/>
                         <ButtonSubmit 
                         type="submit"

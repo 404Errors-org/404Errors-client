@@ -68,12 +68,36 @@ const FieldsForRoutes = ({ setStartCoords, setEndCoords, onSearch, onClear, star
   }, [setStartCoords, setEndCoords, startLocation, endLocation]);
 
   return (
-    <RouteBox>
-      <div ref={startGeocoderRef} className="point"></div>
-      <div ref={endGeocoderRef} className="search"></div>
+    <RouteBox role="search">
+      <div
+        ref={startGeocoderRef}
+        className="point"
+        
+        aria-labelledby="start-geocoder-label"
+        aria-describedby="start-geocoder-description"
+      ></div>
+      <div
+        ref={endGeocoderRef}
+        className="search"
+        aria-labelledby="end-geocoder-label"
+        aria-describedby="end-geocoder-description"
+      ></div>
 
-      <ButtonSubmit onClick={onSearch}>Пошук маршруту</ButtonSubmit>
-      <ButtonSubmit onClick={onClear}>Очистити маршрут</ButtonSubmit>
+      <ButtonSubmit 
+        onClick={onSearch} 
+        
+        aria-label="Пошук маршруту" 
+        aria-describedby="search-route-description"
+      >
+        Пошук маршруту
+      </ButtonSubmit>
+      <ButtonSubmit 
+        onClick={onClear} 
+        aria-label="Очистити маршрут" 
+        aria-describedby="clear-route-description"
+      >
+        Очистити маршрут
+      </ButtonSubmit>
     </RouteBox>
   );
 };

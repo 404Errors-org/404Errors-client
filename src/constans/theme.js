@@ -5,7 +5,7 @@ export const theme = {
         black: '#262626',
         white: '#FFFFFF',
         buttonUnactive: '#D0E8E8',
-        buttonTextUnactive: '#92BDBD',
-        gray: 'rgba(38, 38, 38, 0.5)',
+        buttonTextUnactive: '#6A8C8C',
+        gray: '#666666'
     }
 }

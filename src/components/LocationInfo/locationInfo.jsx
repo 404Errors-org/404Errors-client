@@ -21,7 +21,7 @@ import {
 import { CloseBtn, HeadWrapper, ModalTitle, StarContainer } from "../LocationModal/locationModal.styled";
 import { useAuth } from "../../context/authContext";
 import { handleAddFeedback, getFeedbacksByLocation } from "../../services/feedback";
-import { Checkbox, CustomCheckbox } from "../LocationModal/locationModal.styled";
+import { CustomCheckbox } from "../LocationModal/locationModal.styled";
 
 const LocationInfo = ({ Info, onChangeInfo }) => {
     const infoVisible = () => onChangeInfo();
@@ -31,7 +31,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
     const [feedbacks, setFeedbacks] = useState([]);
     const [newFeedback, setNewFeedback] = useState('');
     const [rating, setRating] = useState(0);
-    const [error, setError] = useState(null); // Додаємо стан для помилок
+    const [error, setError] = useState(null); 
 
     const toggleFeature = (key) => {
         setFeatures((prev) => ({
@@ -47,7 +47,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                     setFeedbacks(feedbackData);
                 })
                 .catch((error) => {
-                    setError("Помилка при завантаженні відгуків: " + error.message); // Обробка помилки
+                    setError("Помилка при завантаженні відгуків: " + error.message); 
                 });
         } else {
             alert("Будь ласка, увійдіть, щоб переглядати відгуки.");
@@ -65,32 +65,36 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
         try {
             await handleAddFeedback(e, user, feedbacks, setFeedbacks, setNewFeedback, setRating, rating, newFeedback, Info.id);
-            setError(null); // Якщо все пройшло добре, очистимо помилку
+            setError(null); 
         } catch (err) {
             setError("Не вдалося додати відгук. Спробуйте ще раз.");
         }
     };
 
     return (
-        <Modal>
+        <Modal aria-labelledby="modal-title" aria-hidden="false">
             <HeadWrapper>
-                <ModalTitle>{Info.name}</ModalTitle>
-                <CloseBtn onClick={infoVisible} />
+                <ModalTitle id="modal-title">{Info.name}</ModalTitle>
+                <CloseBtn 
+                    onClick={infoVisible} 
+                    aria-label="Закрити інформаційне вікно"
+                />
             </HeadWrapper>
 
             {(Info.location || Info.phone || Info.website) && <InfoTitle>Адреса і контакти:</InfoTitle>}
-            {Info.location && <InfoDescription type="location">{Info.location}</InfoDescription>}
-            {Info.phone && <InfoDescription type="number">{Info.phone}</InfoDescription>}
-            {Info.website && <Website href={Info.website} target="_blank">{Info.website}</Website>}
+            {Info.location && <InfoDescription type="location" aria-labelledby="location-description">{Info.location}</InfoDescription>}
+            {Info.phone && <InfoDescription type="number" aria-labelledby="phone-description">{Info.phone}</InfoDescription>}
+            {Info.website && <Website href={Info.website} target="_blank" aria-label={`Перейти на сайт: ${Info.website}`}>{Info.website}</Website>}
 
             <AccessibilitySection>
                 <InfoTitle>Рейтинг доступності закладу:</InfoTitle>
-                <AccessibilityContainer>
+                <AccessibilityContainer aria-live="polite">
                     <AccessibilityItem>
                         <CustomCheckbox 
                             checked={features.hasRamp}
                             onChange={() => toggleFeature('hasRamp')}
                             icon={`/icons/hasRamp.svg`}
+                            aria-label="Пандуси"
                         />
                         <AccessibilityLabel>Пандуси</AccessibilityLabel>
                     </AccessibilityItem>
@@ -99,6 +103,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                             checked={features.hasToilet}
                             onChange={() => toggleFeature('hasToilet')}
                             icon={`/icons/hasToilet.svg`}
+                            aria-label="Широкий вхід"
                         />
                         <AccessibilityLabel>Широкий вхід</AccessibilityLabel>
                     </AccessibilityItem>
@@ -107,6 +112,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                             checked={features.wheelchairAccessible}
                             onChange={() => toggleFeature('wheelchairAccessible')}
                             icon={`/icons/wheelchairAccessible.svg`}
+                            aria-label="Туалети"
                         />
                         <AccessibilityLabel>Туалети</AccessibilityLabel>
                     </AccessibilityItem>
@@ -115,6 +121,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                             checked={features.areBlind}
                             onChange={() => toggleFeature('areBlind')}
                             icon={`/icons/areBlind.svg`}
+                            aria-label="Для сліпих"
                         />
                         <AccessibilityLabel>Для сліпих</AccessibilityLabel>
                     </AccessibilityItem>
@@ -123,6 +130,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                             checked={features.freetomove}
                             onChange={() => toggleFeature('freetomove')}
                             icon={`/icons/freetomove.svg`}
+                            aria-label="Вільне пересування"
                         />
                         <AccessibilityLabel>Вільне пересування</AccessibilityLabel>
                     </AccessibilityItem>
@@ -131,13 +139,12 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
             {editing && (
                 <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-                    {/* Ваші поля для редагування доступності */}
                     <button type="submit">Зберегти</button>
                 </form>
             )}
 
             {user?.hasDisability && !editing && (
-                <EditButton onClick={() => setEditing(true)}>
+                <EditButton onClick={() => setEditing(true)} aria-label="Редагувати доступність">
                     Редагувати доступність
                 </EditButton>
             )}
@@ -147,7 +154,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                 <div style={{ maxHeight: "100px", overflowY: "auto" }}>
                     {feedbacks.length > 0 ? (
                         feedbacks.map(feedback => (
-                            <FeedbackItem key={feedback.id}>
+                            <FeedbackItem key={feedback.id} aria-labelledby={`feedback-${feedback.id}`}>
                                 <FeedbackAuthor>{feedback.author}</FeedbackAuthor>
                                 <FeedbackText>{feedback.content}</FeedbackText>
                                 <FeedbackRating>Оцінка: {feedback.rate} з 5</FeedbackRating>
@@ -159,16 +166,16 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                     )}
                 </div>
 
-                {/* Виведення помилки */}
                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
-                <FeedbackForm onSubmit={handleAddFeedbackWithErrorHandling}>
+                <FeedbackForm onSubmit={handleAddFeedbackWithErrorHandling} aria-live="polite">
                     <FeedbackInput
                         value={newFeedback}
                         onChange={(e) => setNewFeedback(e.target.value)}
                         placeholder="Залишити відгук..."
                         required
                         disabled={isFeedbackDisabled}  
+                        aria-label="Введіть ваш відгук"
                     />
                     {!isFeedbackDisabled && (
                         <StarContainer>
@@ -178,6 +185,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                                     key={star}
                                     style={{ cursor: "pointer", color: star <= rating ? "gold" : "gray" }}
                                     onClick={() => setRating(star)}
+                                    aria-label={`Оцінка ${star} з 5`}
                                 >
                                     ★
                                 </span>
@@ -199,6 +207,5 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
         </Modal>
     );
 };
-
 
 export default LocationInfo;

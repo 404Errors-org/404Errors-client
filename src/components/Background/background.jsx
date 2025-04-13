@@ -5,19 +5,19 @@ import { NavLink } from "react-router-dom";
 const BackGround = ({type, children}) => {
     return(
         <ContainerBg>
-            <FormBox>
+            <FormBox role="form" aria-labelledby="form-title">
                 <HeadBox>
-                    <NavLink to='/'><img src="/icons/logo.png" alt="logo" width={65} height={65}></img></NavLink>
+                    <NavLink aria-label="Повернутися на головну" to='/'><img src="/icons/logo.png" alt="logo" width={65} height={65}></img></NavLink>
                     {type === 'login' ? 
-                    (<OtherLink to='/registration'>Створити профіль</OtherLink>) : 
-                    (<OtherLink to='/login'>Увійти</OtherLink>)}
+                    (<OtherLink to='/registration' aria-label="Перейти до сторінки реєстрації">Створити профіль</OtherLink>) : 
+                    (<OtherLink to='/login' aria-label="Перейти до сторінки входу">Увійти</OtherLink>)}
                 </HeadBox>
                 {children}
             </FormBox>
             {type === 'login' ?
-            <WelcomeBox>
+            <WelcomeBox role="region" aria-labelledby="welcome-title">
                 <CenterElement>
-                    <WelcomeText>З поверненням!</WelcomeText>
+                    <WelcomeText id="welcome-title">З поверненням!</WelcomeText>
                     <WelcomeDescription>Введіть свої персональні дані і розпочніть подорож з нами</WelcomeDescription>
                     <LinkButton to='/registration'>Зареєструватися</LinkButton>
                 </CenterElement>

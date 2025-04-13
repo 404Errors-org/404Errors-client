@@ -9,12 +9,33 @@ const Header = ({ onLocationClick }) => {
       <>
         <HeaderContainer>
             <Wrapper>
-                <img src="/icons/logo.png" alt="logo" width={65} height={65}></img>
-                <Link onClick={onLocationClick} marginLeft='50px'>Локації</Link>
+            <img 
+                  src="/icons/logo.png" 
+                  alt="logo" 
+                  width={65} 
+                  height={65} 
+                  aria-label="Логотип компанії" 
+                />
+                <Link 
+                  onClick={onLocationClick} 
+                  marginLeft='50px' 
+                  aria-label="Відкрити локації" 
+                >
+                  Локації
+                </Link>
             </Wrapper>
             <NavList>
-                {isLoggedIn ? <Link onClick={logout}>{user.username}</Link> :
-                <NavItem><LoginBtn to='/login'>Увійти</LoginBtn></NavItem>}
+                {isLoggedIn ? 
+                    <Link 
+                      onClick={logout} 
+                      aria-label={`Вийти з аккаунта, ${user.username}`} 
+                    >
+                      {user.username}
+                    </Link> :
+                <NavItem>
+                    <LoginBtn to='/login' aria-label="Увійти до аккаунту">
+                        Увійти
+                    </LoginBtn></NavItem>}
             </NavList>
         </HeaderContainer>
 

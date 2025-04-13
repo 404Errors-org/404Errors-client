@@ -52,14 +52,38 @@ const LoginForm = () => {
           >
             {({ isValid, touched }) => (
               <FormContainer>
-                <Input name="login" placeholder="Емейл користувача" />
+                <Input
+                  id="login"
+                  name="login" 
+                  placeholder="Емейл користувача"
+                  aria-required="true"
+                  aria-describedby="loginError"
+                />
                 <FormError name="login" />
-                <Input name="password" placeholder="Пароль" type="password" />
+                
+                <Input
+                  id="password"
+                  name="password"
+                  placeholder="Пароль"
+                  type="password"
+                  aria-required="true"
+                  aria-describedby="passwordError"
+                />
                 <FormError name="password" />
-                <ButtonSubmit type="submit" disabled={!isValid || Object.keys(touched).length === 0}>
+                
+                <ButtonSubmit 
+                  type="submit" 
+                  disabled={!isValid || Object.keys(touched).length === 0}
+                  aria-label="Увійти"
+                >
                   Увійти
                 </ButtonSubmit>
-                {backendError && <ErrorText>{backendError}</ErrorText>}
+
+                {backendError && (
+                  <ErrorText id="loginError" aria-live="assertive">
+                    {backendError}
+                  </ErrorText>
+                )}
               </FormContainer>
             )}
           </Formik>
