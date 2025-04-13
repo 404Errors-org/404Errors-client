@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useRef } from "react";
+import PropTypes from "prop-types";
 
 const PlaceContext = createContext();
 
@@ -32,6 +33,10 @@ export const PlaceProvider = ({ children }) => {
       {children}
     </PlaceContext.Provider>
   );
+};
+
+PlaceProvider.propTypes = {
+  children: PropTypes.element,
 };
 
 export const usePlace = () => {

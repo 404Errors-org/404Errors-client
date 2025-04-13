@@ -3,11 +3,11 @@ import BackGround from "../components/Background/background";
 import RegisterForm from "../components/RegisterForm/registerForm";
 
 const Registration = () => {
-    return(
-        <BackGround>
-            <RegisterForm/>
-        </BackGround>
-    )
-}
+  return (
+    <BackGround type="registration">
+      <RegisterForm />
+    </BackGround>
+  );
+};
 
-export default Registration
+export default Registration;

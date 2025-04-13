@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { loginConfirm } from "../services/login";
 import { registerConfirm } from "../services/register";
+import PropTypes from "prop-types";
 
 const AuthContext = createContext();
 
@@ -19,7 +20,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (code) => {
     try {
       const response = await loginConfirm(code);
-      const { token, user } = response;
+      const { user } = response;
       setUser(user);
       setIsLoggedIn(true);
     } catch (error) {
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (code) => {
     try {
       const response = await registerConfirm(code);
-      const { token, user } = response;
+      const { user } = response;
       setUser(user);
       setIsLoggedIn(true);
     } catch (error) {
@@ -49,6 +50,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return <AuthContext.Provider value={{ user, isLoggedIn, login, register, logout }}>{children}</AuthContext.Provider>;
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useAuth = () => {

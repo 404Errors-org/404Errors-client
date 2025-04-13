@@ -1,21 +1,37 @@
 import React from "react";
 import { InfoDescription, InfoTitle, Modal, Website } from "./locationInfo.styled";
 import { CloseBtn, HeadWrapper, ModalTitle } from "../LocationModal/locationModal.styled";
+import PropTypes from "prop-types";
 
-const LocationInfo = ({Info, onChangeInfo}) => {
-    const infoVisible = () => onChangeInfo()
-    return(
-        <Modal>
-            <HeadWrapper>
-                <ModalTitle>{Info.name}</ModalTitle>
-                <CloseBtn onClick={infoVisible}/>
-            </HeadWrapper>
-            {Info.location || Info.phone || Info.website ? <InfoTitle>Адреса і контакти:</InfoTitle> : null}
-            {Info.location ? <InfoDescription type='location'>{Info.location}</InfoDescription> : null}
-            {Info.phone ? <InfoDescription type='number'>{Info.phone}</InfoDescription> : null}
-            {Info.website ? <Website href={`${Info.website}`} target="_blank">{Info.website}</Website> : null}
-        </Modal>
-    )
-}
+const LocationInfo = ({ info, onChangeInfo }) => {
+  const infoVisible = () => onChangeInfo();
+  return (
+    <Modal>
+      <HeadWrapper>
+        <ModalTitle>{info.name}</ModalTitle>
+        <CloseBtn onClick={infoVisible} />
+      </HeadWrapper>
+      {info.location || info.phone || info.website ? <InfoTitle>Адреса і контакти:</InfoTitle> : null}
+      {info.location ? <InfoDescription type="location">{info.location}</InfoDescription> : null}
+      {info.phone ? <InfoDescription type="number">{info.phone}</InfoDescription> : null}
+      {info.website ? (
+        <Website href={`${info.website}`} target="_blank">
+          {info.website}
+        </Website>
+      ) : null}
+    </Modal>
+  );
+};
 
-export default LocationInfo
+LocationInfo.propTypes = {
+  info: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    location: PropTypes.string,
+    phone: PropTypes.string,
+    website: PropTypes.string,
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  onChangeInfo: PropTypes.func.isRequired,
+};
+
+export default LocationInfo;

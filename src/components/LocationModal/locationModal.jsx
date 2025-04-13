@@ -10,6 +10,7 @@ import {
   ModalTitle,
 } from "./locationModal.styled";
 import { useFilters } from "../../context/filtersContext";
+import PropTypes from "prop-types";
 
 const LocationModal = ({ onChangeLocation }) => {
   const { selectedCategories, selectedFilters, handlePlaces, handleFilters } = useFilters();
@@ -74,6 +75,10 @@ const LocationModal = ({ onChangeLocation }) => {
       </LocationList>
     </Modal>
   );
+};
+
+LocationModal.propTypes = {
+  onChangeLocation: PropTypes.func.isRequired,
 };
 
 export default LocationModal;
