@@ -85,3 +85,10 @@ export const CustomCheckbox = styled.span`
     border-radius: 2px;
   }
 `;
+
+export const StarContainer = styled.div` 
+  display: flex; 
+  justify-content: center; /* Центруємо зірки по горизонталі */ 
+  gap: 5px; /* Відступ між зірками */ 
+  margin: 10px 0; /* Відступи зверху та знизу */ 
+`;

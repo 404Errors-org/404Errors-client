@@ -1,14 +1,6 @@
 import { ErrorMessage, Formik } from "formik";
 import React, { useState } from "react";
-import {
-  ButtonSubmit,
-  ErrorText,
-  ForgotPassword,
-  FormContainer,
-  FormWrapper,
-  Input,
-  TitleForm,
-} from "../../shared/forms.styled";
+import { ButtonSubmit, ErrorText, FormContainer, FormWrapper, Input, TitleForm } from "../../shared/forms.styled";
 import * as yup from "yup";
 import { loginUser } from "../../services/login";
 import ConfirmForm from "../ConfirmForm/confirm";
@@ -29,6 +21,7 @@ const schema = yup.object().shape({
 
 const LoginForm = () => {
   const [approve, setApprove] = useState(false);
+  const [backendError, setBackendError] = useState("");
   return (
     <>
       {approve ? (
@@ -43,6 +36,7 @@ const LoginForm = () => {
             }}
             onSubmit={async (values) => {
               try {
+                setBackendError("");
                 await loginUser({
                   email: values.login,
                   password: values.password,
@@ -50,8 +44,8 @@ const LoginForm = () => {
                 localStorage.setItem("email", values.login);
                 setApprove(true);
               } catch (err) {
-                alert("Щось пішло не так. Перевірте введені дані.");
                 console.error(err);
+                setBackendError("Невірний логін або пароль");
               }
             }}
             validationSchema={schema}
@@ -88,6 +82,8 @@ const LoginForm = () => {
                   Увійти
                   <Tooltip id="login-button-tooltip" />
                 </ButtonSubmit>
+                {backendError && <ErrorText>{backendError}</ErrorText>}
+ 
               </FormContainer>
             )}
           </Formik>
