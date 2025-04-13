@@ -21,6 +21,7 @@ import {
 import { CloseBtn, HeadWrapper, ModalTitle, StarContainer } from "../LocationModal/locationModal.styled";
 import { useAuth } from "../../context/authContext";
 import { handleAddFeedback, getFeedbacksByLocation } from "../../services/feedback";
+import { Tooltip } from "react-tooltip";
 import { Checkbox, CustomCheckbox } from "../LocationModal/locationModal.styled";
 
 const LocationInfo = ({ Info, onChangeInfo }) => {
@@ -31,7 +32,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
     const [feedbacks, setFeedbacks] = useState([]);
     const [newFeedback, setNewFeedback] = useState('');
     const [rating, setRating] = useState(0);
-    const [error, setError] = useState(null); // Додаємо стан для помилок
+    const [error, setError] = useState(null);
 
     const toggleFeature = (key) => {
         setFeatures((prev) => ({
@@ -47,7 +48,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                     setFeedbacks(feedbackData);
                 })
                 .catch((error) => {
-                    setError("Помилка при завантаженні відгуків: " + error.message); // Обробка помилки
+                    setError("Помилка при завантаженні відгуків: " + error.message);
                 });
         } else {
             alert("Будь ласка, увійдіть, щоб переглядати відгуки.");
@@ -65,7 +66,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
         try {
             await handleAddFeedback(e, user, feedbacks, setFeedbacks, setNewFeedback, setRating, rating, newFeedback, Info.id);
-            setError(null); // Якщо все пройшло добре, очистимо помилку
+            setError(null);
         } catch (err) {
             setError("Не вдалося додати відгук. Спробуйте ще раз.");
         }
@@ -73,15 +74,34 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
     return (
         <Modal>
-            <HeadWrapper>
-                <ModalTitle>{Info.name}</ModalTitle>
-                <CloseBtn onClick={infoVisible} />
-            </HeadWrapper>
+      <HeadWrapper>
+        <ModalTitle>{Info.name}</ModalTitle>
+        <CloseBtn onClick={infoVisible} />
+      </HeadWrapper>
 
-            {(Info.location || Info.phone || Info.website) && <InfoTitle>Адреса і контакти:</InfoTitle>}
-            {Info.location && <InfoDescription type="location">{Info.location}</InfoDescription>}
-            {Info.phone && <InfoDescription type="number">{Info.phone}</InfoDescription>}
-            {Info.website && <Website href={Info.website} target="_blank">{Info.website}</Website>}
+      {Info.location || Info.phone ? <InfoTitle>Адреса і контакти:</InfoTitle> : null}
+
+      {Info.location ? (
+        <>
+          <InfoDescription
+            type="location"
+            data-tooltip-id="location-tooltip"
+            data-tooltip-content="Адреса розташування"
+          >
+            {Info.location}
+          </InfoDescription>
+          <Tooltip id="location-tooltip" />
+        </>
+      ) : null}
+
+      {Info.phone ? (
+        <>
+          <InfoDescription type="number" data-tooltip-id="phone-tooltip" data-tooltip-content="Контактний телефон">
+            {Info.phone}
+          </InfoDescription>
+          <Tooltip id="phone-tooltip" place="top-start" />
+        </>
+      ) : null}
 
             <AccessibilitySection>
                 <InfoTitle>Рейтинг доступності закладу:</InfoTitle>
@@ -131,7 +151,6 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
             {editing && (
                 <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-                    {/* Ваші поля для редагування доступності */}
                     <button type="submit">Зберегти</button>
                 </form>
             )}
@@ -159,7 +178,6 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                     )}
                 </div>
 
-                {/* Виведення помилки */}
                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 <FeedbackForm onSubmit={handleAddFeedbackWithErrorHandling}>
