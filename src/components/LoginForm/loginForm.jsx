@@ -4,9 +4,10 @@ import { ButtonSubmit, ErrorText, FormContainer, FormWrapper, Input, TitleForm }
 import * as yup from "yup";
 import { loginUser } from "../../services/login";
 import ConfirmForm from "../ConfirmForm/confirm";
+import { Tooltip } from "react-tooltip";
 
 const FormError = ({ name }) => {
-  return <ErrorMessage name={name} render={(messsage) => <ErrorText>{messsage}</ErrorText>} />;
+  return <ErrorMessage name={name} render={(message) => <ErrorText>{message}</ErrorText>} />;
 };
 
 const schema = yup.object().shape({
@@ -21,7 +22,6 @@ const schema = yup.object().shape({
 const LoginForm = () => {
   const [approve, setApprove] = useState(false);
   const [backendError, setBackendError] = useState("");
-
   return (
     <>
       {approve ? (
@@ -53,37 +53,43 @@ const LoginForm = () => {
             {({ isValid, touched }) => (
               <FormContainer>
                 <Input
-                  id="login"
-                  name="login" 
+                  name="login"
                   placeholder="Емейл користувача"
+                  data-tooltip-id="email-tooltip"
+                  data-tooltip-content="Введіть вашу електронну пошту"
                   aria-required="true"
                   aria-describedby="loginError"
                 />
+                <Tooltip id="email-tooltip" />
                 <FormError name="login" />
                 
                 <Input
-                  id="password"
                   name="password"
                   placeholder="Пароль"
                   type="password"
+                  data-tooltip-id="password-tooltip"
+                  data-tooltip-content="Введіть ваш пароль (6-16 символів)"
                   aria-required="true"
                   aria-describedby="passwordError"
                 />
+                <Tooltip id="password-tooltip" />
                 <FormError name="password" />
-                
-                <ButtonSubmit 
-                  type="submit" 
+
+                <ButtonSubmit
+                  type="submit"
                   disabled={!isValid || Object.keys(touched).length === 0}
-                  aria-label="Увійти"
+                  data-tooltip-id="login-button-tooltip"
+                  data-tooltip-content={
+                    !isValid || Object.keys(touched).length === 0
+                      ? "Заповніть всі поля форми коректно"
+                      : "Натисніть для входу"
+                  }
                 >
                   Увійти
+                  <Tooltip id="login-button-tooltip" />
                 </ButtonSubmit>
 
-                {backendError && (
-                  <ErrorText id="loginError" aria-live="assertive">
-                    {backendError}
-                  </ErrorText>
-                )}
+                {backendError && <ErrorText>{backendError}</ErrorText>}
               </FormContainer>
             )}
           </Formik>

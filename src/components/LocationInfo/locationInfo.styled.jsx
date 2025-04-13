@@ -65,11 +65,10 @@ export const Website = styled.a`
 `;
 
 export const IconSave = styled.img` 
-    margin-left: 10px; 
-    cursor: pointer; 
-` 
- 
- 
+  margin-left: 10px; 
+  cursor: pointer; 
+`;
+
 export const FeedbacksSection = styled.div` 
   margin-top: 20px; 
   padding-top: 20px; 
@@ -82,6 +81,7 @@ export const FeedbackForm = styled.form`
   gap: 10px; 
   margin-top: 10px; 
 `; 
+
 export const FeedbackInput = styled.input` 
   flex-grow: 1; 
   padding: 8px 12px; 
@@ -107,19 +107,21 @@ export const FeedbackButton = styled.button`
     cursor: not-allowed;
   }
 `;
-export const EditButton = styled.button`
-    padding: 8px 16px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%; 
 
-&:hover {
-  background-color: #218838;
-}
+export const EditButton = styled.button`
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%; 
+
+  &:hover {
+    background-color: #218838;
+  }
 `;
+
 export const FeedbackItem = styled.div` 
   margin-bottom: 15px; 
   padding: 10px; 
@@ -135,12 +137,13 @@ export const FeedbackAuthor = styled.div`
 export const FeedbackText = styled.p` 
   margin: 5px 0; 
 `; 
+
 export const AccessibilitySection = styled.div` 
   margin: 20px 0; 
   padding: 20px; 
   background-color: #f8f9fa; 
   flex-direction: row;
-  border-radius: 8px; sykasdajhdsouhduahdhsa
+  border-radius: 8px;
 `; 
  
 export const AccessibilityContainer = styled.div`
@@ -157,19 +160,17 @@ export const AccessibilityItem = styled.div`
   font-size: 14px; 
 `;
  
-
 export const AccessibilityLabel = styled.span` 
   font-size: 16px; 
 `; 
  
- 
 export const FeedbackRating = styled.div` 
-    font-size: 16px; 
-    color: gray; 
-    margin-top: 10px; 
-    span { 
+  font-size: 16px; 
+  color: gray; 
+  margin-top: 10px; 
+  span { 
     cursor: pointer; 
     margin-right: 5px; 
     font-size: 20px; 
-    } 
-`; 
+  } 
+`;

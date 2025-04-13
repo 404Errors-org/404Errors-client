@@ -4,6 +4,7 @@ import { ButtonSubmit, ErrorText, FormContainer, FormWrapper, Input, TitleForm }
 import * as yup from "yup";
 import ConfirmForm from "../ConfirmForm/confirm";
 import { registerUser } from "../../services/register";
+import { Tooltip } from "react-tooltip";
 
 const SUPPORTED_FORMATS = ["application/pdf", "image/jpeg", "image/png"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -54,6 +55,7 @@ const FormError = ({ name }) => {
 const RegisterForm = () => {
   const [approve, setApprove] = useState(false);
   const [isFileSelected, setIsFileSelected] = useState(false);
+
   return (
     <>
       {approve ? (
@@ -92,98 +94,98 @@ const RegisterForm = () => {
           >
             {({ isValid, setFieldValue, values }) => (
               <FormContainer>
-              <Input 
-                name="email" 
-                placeholder="Емейл " 
-                aria-label="Емейл" 
-                aria-required="true"
-              />
-              <FormError name="email" />
-              <Input 
-                name="name" 
-                placeholder="Ім’я користувача" 
-                aria-label="Ім’я користувача" 
-                aria-required="true"
-              />
-              <FormError name="name" />
-              <Input 
-                name="password" 
-                placeholder="Пароль" 
-                type="password" 
-                aria-label="Пароль" 
-                aria-required="true"
-              />
-              <FormError name="password" />
-              <Input 
-                name="repeatPassword" 
-                placeholder="Повторіть пароль " 
-                type="password" 
-                aria-label="Повторіть пароль" 
-                aria-required="true"
-              />
-              <FormError name="repeatPassword" />
+                <Input name="email" placeholder="Емейл " aria-label="Емейл" aria-required="true" data-tooltip-id="email-tooltip" />
+                <Tooltip
+                  id="email-tooltip"
+                  content="Введіть дійсну електронну пошту для підтвердження облікового запису"
+                />
+                <FormError name="email" />
+                <Input name="name" placeholder="Ім’я користувача" aria-label="Ім’я користувача" aria-required="true" data-tooltip-id="name-tooltip" />
+                <Tooltip id="name-tooltip" content="Введіть ваше ім'я для ідентифікації в системі" />
+                <FormError name="name" />
+                <Input name="password" placeholder="Пароль" type="password" aria-label="Пароль" data-tooltip-id="password-tooltip" aria-required="true" />
+                <Tooltip id="password-tooltip" content="Придумайте пароль (6-16 символів)" />
+                <FormError name="password" />
+                <Input
+                  name="repeatPassword"
+                  placeholder="Повторіть пароль "
+                  type="password"
+                  aria-label="Повторіть пароль"
+                  aria-required="true"
+                  data-tooltip-id="repeat-password-tooltip"
+                />
+                <Tooltip id="repeat-password-tooltip" content="Повторіть пароль для підтвердження" />
+                <FormError name="repeatPassword" />
 
-              <div style={{ margin: "20px 0" }}>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    fontSize: "16px",
-                    cursor: "pointer",
-                  }}
-                  aria-label="Прикріпіть документ про інвалідність"
-                >
-                  <Field
-                    type="checkbox"
-                    name="isDisabled"
+                <div style={{ margin: "20px 0" }}>
+                  <label
                     style={{
-                      width: "20px",
-                      height: "20px",
-                      accentColor: "#007BFF",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      fontSize: "16px",
                       cursor: "pointer",
                     }}
-                    aria-checked={values.isDisabled ? "true" : "false"}
-                    aria-labelledby="checkbox-label"
-                  />
-                  Прикріпіть документ про інвалідність
-                </label>
-
-                {values.isDisabled && (
-                  <div style={{ marginTop: "15px" }}>
-                    <input
-                      type="file"
-                      name="disabilityFile"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(event) => {
-                        const file = event.currentTarget.files[0];
-                        setFieldValue("disabilityFile", file);
-                        setIsFileSelected(!!file);
-                      }}
+                    aria-label="Прикріпіть документ про інвалідність"
+                  >
+                    <Field
+                      type="checkbox"
+                      name="isDisabled"
                       style={{
-                        fontSize: "16px",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: `1px solid ${isFileSelected ? "#00bcd4" : "#ccc"}`,
+                        width: "20px",
+                        height: "20px",
+                        accentColor: "#007BFF",
+                        cursor: "pointer",
                       }}
-                      aria-label="Прикріпіть документ"
-                      aria-required={values.isDisabled ? "true" : "false"}
+                      aria-checked={values.isDisabled ? "true" : "false"}
+                      aria-labelledby="checkbox-label"
                     />
-                    <FormError name="disabilityFile" />
-                  </div>
-                )}
-              </div>
+                    Прикріпіть документ про інвалідність
+                  </label>
 
-              <ButtonSubmit type="submit" disabled={!isValid} aria-disabled={!isValid}>
-                Зареєструватися
-              </ButtonSubmit>
-            </FormContainer>
-          )}
-        </Formik>
-      </FormWrapper>
-    )}
-  </>
-);
+                  <Tooltip
+                    id="disabled-tooltip"
+                    content="Виберіть, якщо у вас є документ про інвалідність"
+                    place="top"
+                  />
+
+                  {values.isDisabled && (
+                    <div style={{ marginTop: "15px" }}>
+                      <input
+                        type="file"
+                        name="disabilityFile"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(event) => {
+                          const file = event.currentTarget.files[0];
+                          setFieldValue("disabilityFile", file);
+                          setIsFileSelected(!!file);
+                        }}
+                        style={{
+                          fontSize: "16px",
+                          padding: "8px",
+                          borderRadius: "6px",
+                          border: `1px solid ${isFileSelected ? "#00bcd4" : "#ccc"}`,
+                        }}
+                      />
+                      <FormError name="disabilityFile" />
+                    </div>
+                  )}
+                </div>
+
+                <ButtonSubmit type="submit" disabled={!isValid} aria-disabled={!isValid}>
+                  Зареєструватися
+                </ButtonSubmit>
+                <Tooltip
+                  id="register-button-tooltip"
+                  content={!isValid ? "Заповніть всі поля форми коректно" : "Натисніть для реєстрації"}
+                />
+              </FormContainer>
+            )}
+          </Formik>
+        </FormWrapper>
+      )}
+    </>
+  );
 };
 
 export default RegisterForm;

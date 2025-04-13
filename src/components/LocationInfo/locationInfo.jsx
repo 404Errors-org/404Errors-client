@@ -18,10 +18,10 @@ import {
   AccessibilityLabel,
   EditButton
 } from "./locationInfo.styled";
-import { CloseBtn, HeadWrapper, ModalTitle, StarContainer } from "../LocationModal/locationModal.styled";
+import { CloseBtn, HeadWrapper, ModalTitle, StarContainer, CustomCheckbox, Checkbox } from "../LocationModal/locationModal.styled";
 import { useAuth } from "../../context/authContext";
 import { handleAddFeedback, getFeedbacksByLocation } from "../../services/feedback";
-import { CustomCheckbox } from "../LocationModal/locationModal.styled";
+import { Tooltip } from "react-tooltip";
 
 const LocationInfo = ({ Info, onChangeInfo }) => {
     const infoVisible = () => onChangeInfo();
@@ -62,7 +62,6 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
     const handleAddFeedbackWithErrorHandling = async (e) => {
         e.preventDefault();
-
         try {
             await handleAddFeedback(e, user, feedbacks, setFeedbacks, setNewFeedback, setRating, rating, newFeedback, Info.id);
             setError(null); 
@@ -75,16 +74,44 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
         <Modal aria-labelledby="modal-title" aria-hidden="false">
             <HeadWrapper>
                 <ModalTitle id="modal-title">{Info.name}</ModalTitle>
-                <CloseBtn 
-                    onClick={infoVisible} 
-                    aria-label="Закрити інформаційне вікно"
-                />
+                <CloseBtn onClick={infoVisible} aria-label="Закрити інформаційне вікно" />
             </HeadWrapper>
 
             {(Info.location || Info.phone || Info.website) && <InfoTitle>Адреса і контакти:</InfoTitle>}
-            {Info.location && <InfoDescription type="location" aria-labelledby="location-description">{Info.location}</InfoDescription>}
-            {Info.phone && <InfoDescription type="number" aria-labelledby="phone-description">{Info.phone}</InfoDescription>}
-            {Info.website && <Website href={Info.website} target="_blank" aria-label={`Перейти на сайт: ${Info.website}`}>{Info.website}</Website>}
+            
+            {Info.location && (
+                <>
+                    <InfoDescription
+                        type="location"
+                        data-tooltip-id="location-tooltip"
+                        data-tooltip-content="Адреса розташування"
+                        aria-labelledby="location-description"
+                    >
+                        {Info.location}
+                    </InfoDescription>
+                    <Tooltip id="location-tooltip" />
+                </>
+            )}
+            
+            {Info.phone && (
+                <>
+                    <InfoDescription
+                        type="number"
+                        data-tooltip-id="phone-tooltip"
+                        data-tooltip-content="Контактний телефон"
+                        aria-labelledby="phone-description"
+                    >
+                        {Info.phone}
+                    </InfoDescription>
+                    <Tooltip id="phone-tooltip" place="top-start" />
+                </>
+            )}
+
+            {Info.website && (
+                <Website href={Info.website} target="_blank" aria-label={`Перейти на сайт: ${Info.website}`}>
+                    {Info.website}
+                </Website>
+            )}
 
             <AccessibilitySection>
                 <InfoTitle>Рейтинг доступності закладу:</InfoTitle>
