@@ -1,14 +1,6 @@
 import { ErrorMessage, Formik } from "formik";
 import React, { useState } from "react";
-import {
-  ButtonSubmit,
-  ErrorText,
-  ForgotPassword,
-  FormContainer,
-  FormWrapper,
-  Input,
-  TitleForm,
-} from "../../shared/forms.styled";
+import { ButtonSubmit, ErrorText, FormContainer, FormWrapper, Input, TitleForm } from "../../shared/forms.styled";
 import * as yup from "yup";
 import { loginUser } from "../../services/login";
 import ConfirmForm from "../ConfirmForm/confirm";
@@ -23,16 +15,17 @@ FormError.propTypes = {
 };
 
 const schema = yup.object().shape({
-  login: yup.string().required("Логін обов’язковий"),
+  login: yup.string().required("Логін обов'язковий"),
   password: yup
     .string()
     .min(6, "Пароль має бути не менше 6 символів")
     .max(16, "Пароль має бути не більше 16 символів")
-    .required("Пароль обов’язковий"),
+    .required("Пароль обов'язковий"),
 });
 
 const LoginForm = () => {
   const [approve, setApprove] = useState(false);
+  const [backendError, setBackendError] = useState("");
   return (
     <>
       {approve ? (
@@ -47,6 +40,7 @@ const LoginForm = () => {
             }}
             onSubmit={async (values) => {
               try {
+                setBackendError("");
                 await loginUser({
                   email: values.login,
                   password: values.password,
@@ -54,8 +48,8 @@ const LoginForm = () => {
                 localStorage.setItem("email", values.login);
                 setApprove(true);
               } catch (err) {
-                alert("Щось пішло не так. Перевірте введені дані.");
                 console.error(err);
+                setBackendError("Невірний логін або пароль");
               }
             }}
             validationSchema={schema}
@@ -64,12 +58,12 @@ const LoginForm = () => {
               <FormContainer>
                 <Input name="login" placeholder="Емейл користувача" />
                 <FormError name="login" />
-                <Input name="password" type="password" placeholder="Пароль" />
+                <Input name="password" placeholder="Пароль" type="password" />
                 <FormError name="password" />
-                <ForgotPassword>Забули пароль?</ForgotPassword>
                 <ButtonSubmit type="submit" disabled={!isValid || Object.keys(touched).length === 0}>
                   Увійти
                 </ButtonSubmit>
+                {backendError && <ErrorText>{backendError}</ErrorText>}
               </FormContainer>
             )}
           </Formik>
