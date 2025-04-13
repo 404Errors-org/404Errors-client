@@ -1,6 +1,7 @@
 import React from "react";
 import { HeaderContainer, LoginBtn, NavItem, Link, NavList, Wrapper } from "./header.styled";
 import { useAuth } from "../../context/authContext";
+import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
 
 const Header = ({ onLocationClick }) => {
@@ -33,6 +34,10 @@ const Header = ({ onLocationClick }) => {
       </HeaderContainer>
     </>
   );
+};
+
+Header.propTypes = {
+  onLocationClick: PropTypes.func.isRequired,
 };
 
 export default Header;

@@ -4,6 +4,7 @@ import { ButtonSubmit, ErrorText, FormContainer, FormWrapper, Input, TitleForm }
 import * as yup from "yup";
 import ConfirmForm from "../ConfirmForm/confirm";
 import { registerUser } from "../../services/register";
+import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
 
 const SUPPORTED_FORMATS = ["application/pdf", "image/jpeg", "image/png"];
@@ -52,6 +53,10 @@ const FormError = ({ name }) => {
   return <ErrorMessage name={name} render={(message) => <ErrorText>{message}</ErrorText>} />;
 };
 
+FormError.propTypes = {
+  name: PropTypes.string.isRequired,
+};
+
 const RegisterForm = () => {
   const [approve, setApprove] = useState(false);
   const [isFileSelected, setIsFileSelected] = useState(false);
@@ -91,7 +96,7 @@ const RegisterForm = () => {
             }}
             validationSchema={schema}
           >
-            {({ isValid, setFieldValue, values }) => (
+            {({ isValid, setFieldValue, values, touched }) => (
               <FormContainer>
                 <Input name="email" placeholder="Емейл " data-tooltip-id="email-tooltip" />
                 <Tooltip
@@ -165,8 +170,8 @@ const RegisterForm = () => {
                     </div>
                   )}
                 </div>
-
-                <ButtonSubmit type="submit" data-tooltip-id="register-button-tooltip" disabled={!isValid}>
+                
+                <ButtonSubmit type="submit" data-tooltip-id="register-button-tooltip" disabled={!isValid || Object.keys(touched).length === 0}>
                   Зареєструватися
                 </ButtonSubmit>
                 <Tooltip

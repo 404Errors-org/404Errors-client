@@ -4,10 +4,15 @@ import { ButtonSubmit, ErrorText, FormContainer, FormWrapper, Input, TitleForm }
 import * as yup from "yup";
 import { loginUser } from "../../services/login";
 import ConfirmForm from "../ConfirmForm/confirm";
+import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
 
 const FormError = ({ name }) => {
   return <ErrorMessage name={name} render={(messsage) => <ErrorText>{messsage}</ErrorText>} />;
+};
+
+FormError.propTypes = {
+  name: PropTypes.string.isRequired,
 };
 
 const schema = yup.object().shape({

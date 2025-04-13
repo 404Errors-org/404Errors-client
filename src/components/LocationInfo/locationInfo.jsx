@@ -23,6 +23,7 @@ import { useAuth } from "../../context/authContext";
 import { handleAddFeedback, getFeedbacksByLocation } from "../../services/feedback";
 import { Tooltip } from "react-tooltip";
 import { Checkbox, CustomCheckbox } from "../LocationModal/locationModal.styled";
+import PropTypes from "prop-types";
 
 const LocationInfo = ({ Info, onChangeInfo }) => {
     const infoVisible = () => onChangeInfo();
@@ -43,7 +44,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
     useEffect(() => {
         if (user?.token) {
-            getFeedbacksByLocation(Info.id, user.token)
+            getFeedbacksByLocation(info.id, user.token)
                 .then((feedbackData) => {
                     setFeedbacks(feedbackData);
                 })
@@ -53,7 +54,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
         } else {
             alert("Будь ласка, увійдіть, щоб переглядати відгуки.");
         }
-    }, [user, Info.id]);
+    }, [user, info.id]);
 
     const isFeedbackDisabled = feedbacks.some(feedback => feedback.author === user?.username);
 
@@ -65,7 +66,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
         e.preventDefault();
 
         try {
-            await handleAddFeedback(e, user, feedbacks, setFeedbacks, setNewFeedback, setRating, rating, newFeedback, Info.id);
+            await handleAddFeedback(e, user, feedbacks, setFeedbacks, setNewFeedback, setRating, rating, newFeedback, info.id);
             setError(null);
         } catch (err) {
             setError("Не вдалося додати відгук. Спробуйте ще раз.");
@@ -75,29 +76,29 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
     return (
         <Modal>
       <HeadWrapper>
-        <ModalTitle>{Info.name}</ModalTitle>
+        <ModalTitle>{info.name}</ModalTitle>
         <CloseBtn onClick={infoVisible} />
       </HeadWrapper>
 
-      {Info.location || Info.phone ? <InfoTitle>Адреса і контакти:</InfoTitle> : null}
+      {info.location || info.phone ? <InfoTitle>Адреса і контакти:</InfoTitle> : null}
 
-      {Info.location ? (
+      {info.location ? (
         <>
           <InfoDescription
             type="location"
             data-tooltip-id="location-tooltip"
             data-tooltip-content="Адреса розташування"
           >
-            {Info.location}
+            {info.location}
           </InfoDescription>
           <Tooltip id="location-tooltip" />
         </>
       ) : null}
 
-      {Info.phone ? (
+      {info.phone ? (
         <>
           <InfoDescription type="number" data-tooltip-id="phone-tooltip" data-tooltip-content="Контактний телефон">
-            {Info.phone}
+            {info.phone}
           </InfoDescription>
           <Tooltip id="phone-tooltip" place="top-start" />
         </>
@@ -218,5 +219,15 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
     );
 };
 
+LocationInfo.propTypes = {
+  info: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    location: PropTypes.string,
+    phone: PropTypes.string,
+    website: PropTypes.string,
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  onChangeInfo: PropTypes.func.isRequired,
+};
 
 export default LocationInfo;

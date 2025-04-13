@@ -9,23 +9,23 @@ const Home = () => {
   const { selectedLocation, infoVisible, toggleInfoVisible, setModal, modal } = usePlace();
 
   const getInfo = () => {
-    const Info = {};
+    const info = {};
     if (selectedLocation.name) {
-      Info.name = selectedLocation.name;
+      info.name = selectedLocation.name;
     }
     if (selectedLocation.street) {
-      Info.location = selectedLocation.street;
+      info.location = selectedLocation.street;
     }
     if (selectedLocation.phoneNumber) {
-      Info.phone = selectedLocation.phoneNumber;
+      info.phone = selectedLocation.phoneNumber;
     }
     if (selectedLocation.website) {
-      Info.website = selectedLocation.website;
+      info.website = selectedLocation.website;
     }
     if (selectedLocation.id) {
-      Info.id = selectedLocation.id;
+      info.id = selectedLocation.id;
     }
-    return Info;
+    return info;
   };
 
   const toggleModal = () => {
@@ -39,7 +39,7 @@ const Home = () => {
     <>
       <Header onLocationClick={toggleModal} />
       {modal && <LocationModal onChangeLocation={toggleModal} />}
-      {infoVisible ? <LocationInfo Info={getInfo()} onChangeInfo={toggleInfoVisible} /> : null}
+      {infoVisible ? <LocationInfo info={getInfo()} onChangeInfo={toggleInfoVisible} /> : null}
       <Map />
     </>
   );

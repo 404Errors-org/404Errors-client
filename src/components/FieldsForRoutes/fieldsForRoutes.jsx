@@ -3,9 +3,9 @@ import { ButtonSubmit } from "../../shared/forms.styled";
 import { RouteBox } from "./fieldsForRoutes.styled";
 import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import PropTypes from "prop-types";
 
 const FieldsForRoutes = ({ setStartCoords, setEndCoords, onSearch, onClear, startLocation, endLocation }) => {
-
   const startGeocoderRef = useRef(null);
   const endGeocoderRef = useRef(null);
 
@@ -17,7 +17,7 @@ const FieldsForRoutes = ({ setStartCoords, setEndCoords, onSearch, onClear, star
       mapboxgl: mapboxgl,
       placeholder: "Звідки вирушаємо?",
       flyTo: false,
-      countries: 'ua',
+      countries: "ua",
     });
 
     const endGeocoder = new MapboxGeocoder({
@@ -25,7 +25,7 @@ const FieldsForRoutes = ({ setStartCoords, setEndCoords, onSearch, onClear, star
       mapboxgl: mapboxgl,
       placeholder: "Куди вирушаємо?",
       flyTo: false,
-      countries: 'ua',
+      countries: "ua",
     });
 
     const startGeocoderRefCurrent = startGeocoderRef.current;
@@ -76,6 +76,15 @@ const FieldsForRoutes = ({ setStartCoords, setEndCoords, onSearch, onClear, star
       <ButtonSubmit onClick={onClear}>Очистити маршрут</ButtonSubmit>
     </RouteBox>
   );
+};
+
+FieldsForRoutes.propTypes = {
+  setStartCoords: PropTypes.func.isRequired,
+  setEndCoords: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  onClear: PropTypes.func.isRequired,
+  startLocation: PropTypes.string.isRequired,
+  endLocation: PropTypes.string.isRequired,
 };
 
 export default FieldsForRoutes;
