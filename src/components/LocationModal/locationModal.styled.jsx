@@ -40,7 +40,7 @@ export const HeadWrapper = styled.div`
 export const LocationList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 2fr);
-  row-gap: 28px;
+  row-gap: 12px;
   column-gap: 52px;
   margin-top: 18px;
 `;

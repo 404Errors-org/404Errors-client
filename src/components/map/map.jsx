@@ -21,6 +21,7 @@ const Map = () => {
   const mapContainerRef = useRef();
   const mapboxAccessToken = process.env.REACT_APP_API_KEY;
   const mapInstance = useRef(null);
+  const popupsRef = useRef([]);
 
   const categoryValues = useMemo(
     () => [
@@ -250,6 +251,38 @@ const Map = () => {
       }
     };
 
+    const removeAllPopups = () => {
+      if (popupsRef.current.length > 0) {
+        popupsRef.current.forEach((popup) => popup.remove());
+        popupsRef.current = [];
+      }
+    };
+
+    map.on("mouseenter", "accessible-places-layer", (e) => {
+      map.getCanvas().style.cursor = "pointer";
+
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const name = e.features[0].properties.name || "Локація";
+
+      const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: "map-tooltip",
+        offset: 15,
+        maxWidth: "200px",
+      })
+        .setLngLat(coordinates)
+        .setHTML(`<div>Натисніть для деталей</div>`)
+        .addTo(map);
+
+      popupsRef.current.push(popup);
+    });
+
+    map.on("mouseleave", "accessible-places-layer", () => {
+      map.getCanvas().style.cursor = "";
+      removeAllPopups();
+    });
+
     map.on("click", "accessible-places-layer", handlePlaceClick);
     map.on("click", handleMapClick);
 
@@ -257,6 +290,9 @@ const Map = () => {
       if (map) {
         map.off("click", "accessible-places-layer", handlePlaceClick);
         map.off("click", handleMapClick);
+        map.off("mouseenter", "accessible-places-layer");
+        map.off("mouseleave", "accessible-places-layer");
+        removeAllPopups();
       }
     };
   }, [mapLoaded, addMarker, changeSelectLocation]);
@@ -276,6 +312,38 @@ const Map = () => {
   useEffect(() => {
     const map = mapInstance.current;
     if (!mapLoaded || !map || !map.isStyleLoaded() || !locations || !locations.features) return;
+
+    let styleElement;
+    if (!document.getElementById("map-tooltip-style")) {
+      styleElement = document.createElement("style");
+      styleElement.id = "map-tooltip-style";
+      styleElement.innerHTML = `
+        .map-tooltip {
+          background: white !important;
+          border-radius: 6px !important;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+          z-index: 999 !important;
+        }
+        .map-tooltip .mapboxgl-popup-content {
+          padding: 8px 12px !important;
+          border-radius: 6px !important;
+          font-size: 14px !important;
+          font-weight: 500 !important;
+          text-align: center !important;
+          color: #026C6C !important;
+        }
+        .map-tooltip .mapboxgl-popup-tip {
+          border-top-color: white !important;
+          border-bottom-color: white !important;
+          border-left-color: white !important;
+          border-right-color: white !important;
+        }
+        .map-tooltip .mapboxgl-popup-close-button {
+          display: none !important;
+        }
+      `;
+      document.head.appendChild(styleElement);
+    }
 
     const removeExistingLayerAndSource = () => {
       if (map.getLayer("accessible-places-layer")) {
@@ -312,6 +380,7 @@ const Map = () => {
             ],
             "icon-allow-overlap": true,
             "icon-size": 0.07,
+            "icon-cursor": "pointer",
           },
         });
       } catch (error) {
@@ -333,6 +402,12 @@ const Map = () => {
     } else {
       map.once("styledata", updateLocationsLayer);
     }
+
+    return () => {
+      if (styleElement) {
+        document.head.removeChild(styleElement);
+      }
+    };
   }, [mapLoaded, locationVersion, selectedCategories, categoryValues]);
 
   const handleClear = useCallback(() => {

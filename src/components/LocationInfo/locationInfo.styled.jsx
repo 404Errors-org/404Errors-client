@@ -42,23 +42,3 @@ export const InfoDescription = styled.p`
     background-size: contain;
   }
 `;
-
-export const Website = styled.a`
-  display: flex;
-  font-size: 16px;
-  font-weight: 400;
-  color: ${(props) => props.theme.colors.gray};
-  align-items: center;
-  margin-top: 8px;
-  text-decoration: none;
-  &::before {
-    display: inline-block;
-    content: "";
-    width: 19px;
-    height: 19px;
-    margin-right: 5px;
-    background: url("./icons/infosite.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-`;
