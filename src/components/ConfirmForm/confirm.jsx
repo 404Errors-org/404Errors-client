@@ -4,10 +4,15 @@ import { ButtonSubmit, ErrorText, FormContainer, FormWrapper, Input, TitleForm }
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
 
 const FormError = ({ name }) => {
   return <ErrorMessage name={name} render={(messsage) => <ErrorText>{messsage}</ErrorText>} />;
+};
+
+FormError.propTypes = {
+  name: PropTypes.string.isRequired,
 };
 
 const schema = yup.object().shape({
@@ -74,6 +79,10 @@ const ConfirmForm = ({ type }) => {
       </Formik>
     </FormWrapper>
   );
+};
+
+ConfirmForm.propTypes = {
+  type: PropTypes.oneOf(["login", "registration"]).isRequired,
 };
 
 export default ConfirmForm;

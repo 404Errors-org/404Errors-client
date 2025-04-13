@@ -10,6 +10,7 @@ import {
   ModalTitle,
 } from "./locationModal.styled";
 import { useFilters } from "../../context/filtersContext";
+import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
 
 const LocationModal = ({ onChangeLocation }) => {
@@ -100,6 +101,10 @@ const LocationModal = ({ onChangeLocation }) => {
       </LocationList>
     </Modal>
   );
+};
+
+LocationModal.propTypes = {
+  onChangeLocation: PropTypes.func.isRequired,
 };
 
 export default LocationModal;

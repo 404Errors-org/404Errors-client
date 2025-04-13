@@ -11,6 +11,7 @@ import {
   WelcomeText,
 } from "./background.styled";
 import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
 
 const BackGround = ({ type, children }) => {
@@ -50,7 +51,9 @@ const BackGround = ({ type, children }) => {
       {type === "login" ? (
         <WelcomeBox role="region" aria-labelledby="welcome-title">
           <CenterElement>
+
             <WelcomeText id="welcome-title">З поверненням!</WelcomeText>
+
             <WelcomeDescription>Введіть свої персональні дані і розпочніть подорож з нами</WelcomeDescription>
             <LinkButton to="/registration" data-tooltip-id="register-tooltip">
               Зареєструватися
@@ -74,6 +77,11 @@ const BackGround = ({ type, children }) => {
       )}
     </ContainerBg>
   );
+};
+
+BackGround.propTypes = {
+  type: PropTypes.oneOf(["login", "registration"]).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default BackGround;

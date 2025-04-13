@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { getLocations } from "../services/locations";
+import PropTypes from "prop-types";
 
 const FiltersContext = createContext();
 
@@ -170,6 +171,10 @@ export const FiltersProvider = ({ children }) => {
       {children}
     </FiltersContext.Provider>
   );
+};
+
+FiltersProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useFilters = () => {
