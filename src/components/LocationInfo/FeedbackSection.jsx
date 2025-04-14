@@ -224,10 +224,8 @@ const FeedbackSection = ({ Info, user }) => {
           <FeedbackButton
             type="submit"
             disabled={isFeedbackDisabled || loading}
-            style={{
-              backgroundColor: isFeedbackDisabled ? "#28a745" : loading ? "#ccc" : "#007bff",
-              cursor: isFeedbackDisabled || loading ? "not-allowed" : "pointer",
-            }}
+            isDisabled={isFeedbackDisabled}
+            isLoading={loading}
           >
             {isFeedbackDisabled ? "Відгук додано" : loading ? "Надсилання..." : "Додати відгук"}
           </FeedbackButton>

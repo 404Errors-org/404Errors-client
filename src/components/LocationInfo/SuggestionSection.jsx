@@ -97,7 +97,7 @@ const SuggestionSection = ({ Info, user }) => {
               </div>
             ))
           ) : (
-            <div style={{ textAlign: "center", padding: "10px" }}>
+            <div style={{ textAlign: "center", padding: "10px", fontSize: "15px" }}>
               <p>Немає пропозицій щодо доступності для цього закладу</p>
             </div>
           )}

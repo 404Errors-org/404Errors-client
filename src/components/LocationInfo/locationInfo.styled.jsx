@@ -1,17 +1,18 @@
 import styled from "@emotion/styled";
+import { device } from "../../constans/breakpoints";
 
 export const Modal = styled.div`
   position: absolute;
   width: 410px;
   top: 90px;
   left: 20px;
-  max-height: calc(100vh - 120px); /* Limit maximum height to viewport minus margins */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
   background-color: ${(props) => props.theme.colors.white};
   padding: 24px 16px;
   border-radius: 12px;
   z-index: 999;
-  scrollbar-width: thin; /* For Firefox */
+  scrollbar-width: thin;
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -26,6 +27,16 @@ export const Modal = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background: #7ccdcd;
   }
+
+  @media ${device.small} {
+    width: 300px;
+  }
+
+  @media ${device.extraSmall} {
+    left: 10px;
+    top: 80px;
+    width: 270px;
+  }
 `;
 
 export const InfoTitle = styled.p`
@@ -34,6 +45,10 @@ export const InfoTitle = styled.p`
   color: ${(props) => props.theme.colors.primaryDark};
   margin-top: 10px;
   margin-bottom: 10px;
+
+  @media ${device.extraSmall} {
+    font-size: 15px;
+  }
 `;
 
 export const InfoDescription = styled.p`
@@ -58,6 +73,10 @@ export const InfoDescription = styled.p`
     }};
     background-repeat: no-repeat;
     background-size: contain;
+  }
+
+  @media ${device.extraSmall} {
+    font-size: 15px;
   }
 `;
 
@@ -106,13 +125,15 @@ export const FeedbackInput = styled.input`
 `;
 
 export const FeedbackButton = styled.button`
-  padding: 10px 20px;
-  background-color: #007bff;
+  background-color: ${({ $isDisabled, $isLoading }) => ($isDisabled ? "gray" : $isLoading ? "#ccc" : "#1B5A7B")};
+  cursor: ${({ $isDisabled, $isLoading }) => ($isDisabled || $isLoading ? "not-allowed" : "pointer")};
   color: white;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #0056b3;
@@ -126,7 +147,11 @@ export const FeedbackButton = styled.button`
 
 export const EditButton = styled.button`
   padding: 8px 16px;
-  background-color: #28a745;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  background-color: #1b5a7b;
+  font-weight: 500;
+  font-size: 16px;
   color: white;
   border: none;
   border-radius: 4px;
@@ -134,7 +159,7 @@ export const EditButton = styled.button`
   width: 100%;
 
   &:hover {
-    background-color: #218838;
+    background-color: #14455f;
   }
 `;
 
@@ -160,11 +185,20 @@ export const AccessibilitySection = styled.div`
   background-color: #f8f9fa;
   flex-direction: row;
   border-radius: 8px;
+
+  @media ${device.small} {
+    padding: 10px 20px;
+  }
 `;
 
 export const AccessibilityContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+  @media ${device.small} {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export const AccessibilityItem = styled.div`
@@ -177,6 +211,10 @@ export const AccessibilityItem = styled.div`
 export const AccessibilityLabel = styled.span`
   font-size: 16px;
   padding-left: 5px;
+
+  @media ${device.extraSmall} {
+    font-size: 15px;
+  }
 `;
 
 export const FeedbackRating = styled.div`

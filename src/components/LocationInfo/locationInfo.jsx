@@ -54,7 +54,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                 padding: "5px 10px",
                 fontSize: "14px",
                 cursor: "pointer",
-                backgroundColor: suggestionText ? "#007bff" : "#7CCDCD",
+                backgroundColor: "#7CCDCD",
                 color: "#fff",
                 border: "none",
                 borderRadius: "5px",
