@@ -23,7 +23,7 @@ import { handleAddFeedback, getFeedbacksByLocation } from "../../services/feedba
 import { Tooltip } from "react-tooltip";
 import { CustomCheckbox } from "../LocationModal/locationModal.styled";
 import PropTypes from "prop-types";
-
+import { sendSuggestion } from "../../services/suggestions";
 const LocationInfo = ({ Info, onChangeInfo }) => {
   const infoVisible = () => onChangeInfo();
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,9 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
   const [rating, setRating] = useState(0);
   const [error, setError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
+  const [showSuggestionModal, setShowSuggestionModal] = useState(false);
+  const [suggestionText, setSuggestionText] = useState('');
+  const [suggestionError, setSuggestionError] = useState(null);
   const toggleFeature = (key) => {
     setFeatures((prev) => ({
       ...prev,
@@ -131,7 +133,26 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
   return (
     <Modal aria-labelledby="modal-title" aria-hidden="false">
       <HeadWrapper>
-        <ModalTitle>{Info?.name || "Location"}</ModalTitle>
+      <ModalTitle>
+    {Info.name}
+    {user && !user.hasDisability && (
+         <button 
+         style={{
+             marginLeft: "10px", 
+             padding: "5px 10px", 
+             fontSize: "14px", 
+             cursor: "pointer", 
+             backgroundColor: suggestionText ? '#007bff' : '#7CCDCD',
+             color: '#fff',
+             border: 'none',
+             borderRadius: '5px',
+             fontWeight: 600,
+         }}
+         onClick={() => setShowSuggestionModal(true)}
+     >
+         Запропонувати зміну
+     </button>
+    )}</ModalTitle>
         <CloseBtn onClick={infoVisible} />
       </HeadWrapper>
 
@@ -338,8 +359,62 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
           </FeedbackForm>
         )}
       </FeedbacksSection>
+      {showSuggestionModal && (
+  <Modal style={{ zIndex: 1000 }}>
+    <HeadWrapper>
+      <ModalTitle>Пропозиція щодо доступності</ModalTitle>
+      <CloseBtn onClick={() => setShowSuggestionModal(false)} />
+    </HeadWrapper>
+
+    <form 
+      onSubmit={async (e) => {
+        e.preventDefault();
+        try {
+          await sendSuggestion(Info.id, suggestionText, user.token);
+          setSuggestionError(null);
+          setSuggestionText('');
+          setShowSuggestionModal(false);
+          alert("Пропозицію відправлено!");
+        } catch (err) {
+          setSuggestionError("Не вдалося відправити пропозицію.");
+        }
+      }}
+    >
+      <textarea 
+        placeholder="Опишіть, що варто змінити..." 
+        value={suggestionText}
+        onChange={(e) => setSuggestionText(e.target.value)}
+        style={{ width: '100%', height: '100px', marginBottom: '10px' }}
+        required
+      />
+      {suggestionError && <p style={{ color: 'red' }}>{suggestionError}</p>}
+      <button 
+        type="submit" 
+        style={{
+          padding: "10px 20px", 
+          fontSize: "16px", 
+          backgroundColor: suggestionText ? '#007bff' : '#7CCDCD', 
+          color: '#fff', 
+          border: 'none', 
+          borderRadius: '8px', 
+          fontWeight: 600, 
+          cursor: suggestionText ? 'pointer' : 'not-allowed', 
+          transition: 'background-color 0.3s ease, transform 0.2s ease',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        disabled={!suggestionText}
+      >
+        Відправити
+      </button>
+    </form>
+  </Modal>
+)}
+
     </Modal>
-  );
+    
+);
 };
 
 LocationInfo.propTypes = {
