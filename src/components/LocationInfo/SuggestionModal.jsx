@@ -31,7 +31,9 @@ const SuggestionModal = ({ Info, user, suggestionText, setSuggestionText, onClos
         left: "50%",
         transform: "translate(-50%, -50%)",
         width: "80%",
-        maxWidth: "500px",
+        maxWidth: "300px",
+        border: "1px solid #8c8c8c",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
       }}
     >
       <HeadWrapper>

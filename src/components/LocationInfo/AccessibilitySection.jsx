@@ -162,22 +162,9 @@ const AccessibilitySection = ({ Info, user, locations }) => {
 
       {editing && (
         <form onSubmit={handleSave}>
-          <button
-            type="submit"
-            disabled={saving}
-            style={{
-              backgroundColor: saving ? "#ccc" : "#007bff",
-              color: "white",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "4px",
-              cursor: saving ? "not-allowed" : "pointer",
-              margin: "10px 0",
-              width: "100%",
-            }}
-          >
+          <EditButton type="submit" disabled={saving}>
             {saving ? "Зберігання..." : "Зберегти"}
-          </button>
+          </EditButton>
         </form>
       )}
 
