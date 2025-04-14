@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../components/Header/header";
 import Map from "../components/map/map";
 import LocationModal from "../components/LocationModal/locationModal";
-import LocationInfo from "../components/LocationInfo/locationInfo";
+import LocationInfo from "../components/LocationInfo/LocationInfo";
 import { usePlace } from "../context/placeContext";
 
 const Home = () => {
