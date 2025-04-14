@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { device } from "../../constans/breakpoints";
 
 export const Modal = styled.div`
   position: absolute;
@@ -9,6 +10,18 @@ export const Modal = styled.div`
   padding: 24px 16px;
   border-radius: 12px;
   z-index: 999;
+
+  @media ${device.medium} {
+    top: 80px;
+    left: 10px;
+    width: 430px;
+  }
+
+  @media ${device.extraSmall} {
+    width: 270px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
 `;
 
 export const ModalTitle = styled.h3`
@@ -43,6 +56,14 @@ export const LocationList = styled.div`
   row-gap: 12px;
   column-gap: 52px;
   margin-top: 18px;
+
+  @media ${device.medium} {
+    column-gap: 0px;
+  }
+
+  @media ${device.extraSmall} {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 export const Checkbox = styled.input`
@@ -86,9 +107,9 @@ export const CustomCheckbox = styled.span`
   }
 `;
 
-export const StarContainer = styled.div` 
-  display: flex; 
-  justify-content: center; /* Центруємо зірки по горизонталі */ 
-  gap: 5px; /* Відступ між зірками */ 
-  margin: 10px 0; /* Відступи зверху та знизу */ 
+export const StarContainer = styled.div`
+  display: flex;
+  justify-content: center; /* Центруємо зірки по горизонталі */
+  gap: 5px; /* Відступ між зірками */
+  margin: 10px 0; /* Відступи зверху та знизу */
 `;
