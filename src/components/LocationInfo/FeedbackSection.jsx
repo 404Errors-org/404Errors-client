@@ -150,7 +150,7 @@ const FeedbackSection = ({ Info, user }) => {
 
   return (
     <FeedbacksSection>
-      <InfoTitle> {user && "Відгуки:"}</InfoTitle>
+      <InfoTitle>Відгуки:</InfoTitle>
       <div style={{ maxHeight: "200px", overflowY: "auto", marginBottom: "15px" }}>
         {feedbacksLoading ? (
           <div style={{ textAlign: "center", padding: "10px" }}>
@@ -187,7 +187,7 @@ const FeedbackSection = ({ Info, user }) => {
             borderRadius: "5px",
           }}
         >
-          <p style={{ color: "#666" }}>Увійдіть, щоб переглядати та залишати відгуки</p>
+          <p style={{ color: "#666" }}>Увійдіть, щоб залишити відгук</p>
         </div>
       ) : (
         <FeedbackForm onSubmit={handleAddFeedbackWithErrorHandling} aria-live="polite">

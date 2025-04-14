@@ -65,20 +65,11 @@ const handleAddFeedback = async (
   }
 };
 
-const getFeedbacksByLocation = async (locationId, token, signal) => {
+const getFeedbacksByLocation = async (locationId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/feedbacks/location/${locationId}`, {
-      headers: {
-        Authorization: token ? `Bearer ${token}` : undefined,
-      },
-      signal: signal,
-    });
-
+    const response = await axios.get(`${BASE_URL}/feedbacks/location/${locationId}`);
     return response.data;
   } catch (error) {
-    if (axios.isCancel(error)) {
-      return [];
-    }
     console.error("Помилка при отриманні відгуків:", error);
     throw error;
   }

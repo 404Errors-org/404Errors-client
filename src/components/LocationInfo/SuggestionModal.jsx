@@ -16,7 +16,7 @@ const SuggestionModal = ({ Info, user, suggestionText, setSuggestionText, onClos
       onClose();
       alert("Пропозицію відправлено!");
     } catch (err) {
-      setSuggestionError("Не вдалося відправити пропозицію.");
+      setSuggestionError("Ви не можете відправити більше одного запиту.");
     }
   };
 
