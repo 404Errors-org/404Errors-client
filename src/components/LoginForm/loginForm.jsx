@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
 
 const FormError = ({ name }) => {
-  return <ErrorMessage name={name} render={(messsage) => <ErrorText>{messsage}</ErrorText>} />;
+  return <ErrorMessage name={name} render={(message) => <ErrorText>{message}</ErrorText>} />;
 };
 
 FormError.propTypes = {
@@ -62,18 +62,24 @@ const LoginForm = () => {
                   placeholder="Емейл користувача"
                   data-tooltip-id="email-tooltip"
                   data-tooltip-content="Введіть вашу електронну пошту"
+                  aria-required="true"
+                  aria-describedby="loginError"
                 />
                 <Tooltip id="email-tooltip" />
                 <FormError name="login" />
+                
                 <Input
                   name="password"
                   placeholder="Пароль"
                   type="password"
                   data-tooltip-id="password-tooltip"
                   data-tooltip-content="Введіть ваш пароль (6-16 символів)"
+                  aria-required="true"
+                  aria-describedby="passwordError"
                 />
                 <Tooltip id="password-tooltip" />
                 <FormError name="password" />
+
                 <ButtonSubmit
                   type="submit"
                   disabled={!isValid || Object.keys(touched).length === 0}
@@ -87,8 +93,8 @@ const LoginForm = () => {
                   Увійти
                   <Tooltip id="login-button-tooltip" />
                 </ButtonSubmit>
+
                 {backendError && <ErrorText>{backendError}</ErrorText>}
- 
               </FormContainer>
             )}
           </Formik>
