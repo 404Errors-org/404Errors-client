@@ -131,8 +131,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
   };
 
   return (
-    
-    <Modal>
+    <Modal aria-labelledby="modal-title" aria-hidden="false">
       <HeadWrapper>
       <ModalTitle>
     {Info.name}
@@ -165,6 +164,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
             type="location"
             data-tooltip-id="location-tooltip"
             data-tooltip-content="Адреса розташування"
+            aria-labelledby="location-description"
           >
             {Info.location}
           </InfoDescription>
@@ -174,7 +174,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
       {Info?.phone ? (
         <>
-          <InfoDescription type="number" data-tooltip-id="phone-tooltip" data-tooltip-content="Контактний телефон">
+          <InfoDescription type="number" data-tooltip-id="phone-tooltip" data-tooltip-content="Контактний телефон" aria-labelledby="phone-description">
             {Info.phone}
           </InfoDescription>
           <Tooltip id="phone-tooltip" place="top-start" />
@@ -183,13 +183,14 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
 
       <AccessibilitySection>
         <InfoTitle>Рейтинг доступності закладу:</InfoTitle>
-        <AccessibilityContainer>
+        <AccessibilityContainer aria-live="polite">
           <AccessibilityItem>
             <CustomCheckbox
               checked={features?.hasRamp || false}
               onChange={() => toggleFeature("hasRamp")}
               icon={`/icons/hasRamp.svg`}
               style={{ margin: "0" }}
+              aria-label="Пандуси"
             />
             <AccessibilityLabel>Пандуси</AccessibilityLabel>
           </AccessibilityItem>
@@ -199,6 +200,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
               onChange={() => toggleFeature("hasToilet")}
               icon={`/icons/hasToilet.svg`}
               style={{ margin: "0" }}
+              aria-label="Туалети"
             />
             <AccessibilityLabel>Широкий вхід</AccessibilityLabel>
           </AccessibilityItem>
@@ -208,6 +210,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
               onChange={() => toggleFeature("wheelchairAccessible")}
               icon={`/icons/wheelchairAccessible.svg`}
               style={{ margin: "0" }}
+              aria-label="Широкий вхід"
             />
             <AccessibilityLabel>Туалети</AccessibilityLabel>
           </AccessibilityItem>
@@ -217,6 +220,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
               onChange={() => toggleFeature("areBlind")}
               icon={`/icons/areBlind.svg`}
               style={{ margin: "0" }}
+              aria-label="Для незрячих людей"
             />
             <AccessibilityLabel>Для незрячих людей</AccessibilityLabel>
           </AccessibilityItem>
@@ -226,8 +230,10 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
               onChange={() => toggleFeature("freetomove")}
               icon={`/icons/freetomove.svg`}
               style={{ margin: "0" }}
+              aria-label="Вільне пересування"
             />
             <AccessibilityLabel>Вільне пересування</AccessibilityLabel>
+            
           </AccessibilityItem>
         </AccessibilityContainer>
       </AccessibilitySection>
@@ -295,7 +301,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
             <p>Увійдіть, щоб залишити відгук</p>
           </div>
         ) : (
-          <FeedbackForm onSubmit={handleAddFeedbackWithErrorHandling}>
+          <FeedbackForm onSubmit={handleAddFeedbackWithErrorHandling} aria-live="polite">
             {isFeedbackDisabled && (
               <div
                 style={{
@@ -317,6 +323,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
               placeholder={isFeedbackDisabled ? "Ви вже додали відгук" : "Залишити відгук..."}
               required
               disabled={isFeedbackDisabled || loading}
+              aria-label="Введіть ваш відгук"
             />
 
             {!isFeedbackDisabled && (
@@ -331,6 +338,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
                       opacity: loading ? 0.6 : 1,
                     }}
                     onClick={() => !loading && setRating(star)}
+                    aria-label={`Оцінка ${star} з 5`}
                   >
                     ★
                   </span>

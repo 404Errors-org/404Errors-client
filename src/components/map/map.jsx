@@ -460,7 +460,12 @@ const Map = () => {
 
   return (
     <Box>
-      <div ref={mapContainerRef} style={{ width: "100%", height: "100vh" }} />
+      <div
+        ref={mapContainerRef}
+        style={{ width: "100%", height: "100vh" }}
+        role="application"
+        aria-label="Interactive map for accessible locations"
+      />
       <FieldsForRoutes
         startLocation={startLocation}
         endLocation={endLocation}
@@ -468,6 +473,8 @@ const Map = () => {
         setEndCoords={handleSetEndCoords}
         onSearch={buildRoute}
         onClear={handleClear}
+        aria-labelledby="start-location-input end-location-input"
+        aria-describedby="start-location-description end-location-description"
       />
     </Box>
   );

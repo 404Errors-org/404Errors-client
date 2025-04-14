@@ -39,25 +39,28 @@ const ConfirmForm = ({ type }) => {
       resetForm();
     }
   };
-  return (
-    <FormWrapper marginTop="140px">
-      <TitleForm>Введіть код підтвердження</TitleForm>
 
+  return (
+    <FormWrapper marginTop="140px" role="form" aria-labelledby="form-title">
+      <TitleForm id="form-title">Введіть код підтвердження</TitleForm>
       <Formik
-        initialValues={{
-          code: "",
-        }}
+        initialValues={{ code: "" }}
         onSubmit={handleSubmit}
         validationSchema={schema}
       >
-        {({ touched, values }) => (
+        {({ touched, values, isValid }) => (
           <FormContainer>
-            <Input name="code" placeholder="Код з email" data-tooltip-id="code-tooltip" />
+            <Input
+              name="code"
+              placeholder="Код з email"
+              aria-describedby="code-error"
+              data-tooltip-id="code-tooltip"
+            />
             <Tooltip id="code-tooltip" content="Введіть 6-значний код із листа" place="bottom" />
             <FormError name="code" />
             <ButtonSubmit
               type="submit"
-              disabled={!values.code || values.code.length !== 6}
+              disabled={!isValid || !values.code || values.code.length !== 6}
               data-tooltip-id="confirm-button-tooltip"
             >
               Підтвердити

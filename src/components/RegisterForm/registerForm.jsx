@@ -60,6 +60,7 @@ FormError.propTypes = {
 const RegisterForm = () => {
   const [approve, setApprove] = useState(false);
   const [isFileSelected, setIsFileSelected] = useState(false);
+
   return (
     <>
       {approve ? (
@@ -98,22 +99,24 @@ const RegisterForm = () => {
           >
             {({ isValid, setFieldValue, values, touched }) => (
               <FormContainer>
-                <Input name="email" placeholder="Емейл " data-tooltip-id="email-tooltip" />
+                <Input name="email" placeholder="Емейл " aria-label="Емейл" aria-required="true" data-tooltip-id="email-tooltip" />
                 <Tooltip
                   id="email-tooltip"
                   content="Введіть дійсну електронну пошту для підтвердження облікового запису"
                 />
                 <FormError name="email" />
-                <Input name="name" placeholder="Ім’я користувача" data-tooltip-id="name-tooltip" />
+                <Input name="name" placeholder="Ім’я користувача" aria-label="Ім’я користувача" aria-required="true" data-tooltip-id="name-tooltip" />
                 <Tooltip id="name-tooltip" content="Введіть ваше ім'я для ідентифікації в системі" />
                 <FormError name="name" />
-                <Input name="password" placeholder="Пароль" type="password" data-tooltip-id="password-tooltip" />
+                <Input name="password" placeholder="Пароль" type="password" aria-label="Пароль" data-tooltip-id="password-tooltip" aria-required="true" />
                 <Tooltip id="password-tooltip" content="Придумайте пароль (6-16 символів)" />
                 <FormError name="password" />
                 <Input
                   name="repeatPassword"
                   placeholder="Повторіть пароль "
                   type="password"
+                  aria-label="Повторіть пароль"
+                  aria-required="true"
                   data-tooltip-id="repeat-password-tooltip"
                 />
                 <Tooltip id="repeat-password-tooltip" content="Повторіть пароль для підтвердження" />
@@ -128,7 +131,7 @@ const RegisterForm = () => {
                       fontSize: "16px",
                       cursor: "pointer",
                     }}
-                    data-tooltip-id="disabled-tooltip"
+                    aria-label="Прикріпіть документ про інвалідність"
                   >
                     <Field
                       type="checkbox"
@@ -139,9 +142,12 @@ const RegisterForm = () => {
                         accentColor: "#007BFF",
                         cursor: "pointer",
                       }}
+                      aria-checked={values.isDisabled ? "true" : "false"}
+                      aria-labelledby="checkbox-label"
                     />
                     Прикріпіть документ про інвалідність
                   </label>
+
                   <Tooltip
                     id="disabled-tooltip"
                     content="Виберіть, якщо у вас є документ про інвалідність"
@@ -171,7 +177,7 @@ const RegisterForm = () => {
                   )}
                 </div>
                 
-                <ButtonSubmit type="submit" data-tooltip-id="register-button-tooltip" disabled={!isValid || Object.keys(touched).length === 0}>
+                <ButtonSubmit type="submit" data-tooltip-id="register-button-tooltip" disabled={!isValid || Object.keys(touched).length === 0} aria-disabled={!isValid>
                   Зареєструватися
                 </ButtonSubmit>
                 <Tooltip

@@ -17,19 +17,19 @@ import { Tooltip } from "react-tooltip";
 const BackGround = ({ type, children }) => {
   return (
     <ContainerBg>
-      <FormBox>
+      <FormBox role="form" aria-labelledby="form-title">
         <HeadBox>
-          <NavLink to="/" data-tooltip-id="logo-tooltip">
-            <img src="/icons/logo.png" alt="logo" width={65} height={65}></img>
+          <NavLink to="/" aria-label="Повернутися на головну" data-tooltip-id="logo-tooltip">
+            <img src="/icons/logo.png" alt="logo" width={65} height={65} />
           </NavLink>
           <Tooltip id="logo-tooltip" content="Перейти на головну сторінку" place="bottom" />
 
           {type === "login" ? (
-            <OtherLink to="/registration" data-tooltip-id="create-profile-tooltip">
+            <OtherLink to="/registration" aria-label="Перейти до сторінки реєстрації" data-tooltip-id="create-profile-tooltip">
               Створити профіль
             </OtherLink>
           ) : (
-            <OtherLink to="/login" data-tooltip-id="login-tooltip">
+            <OtherLink to="/login" aria-label="Перейти до сторінки входу" data-tooltip-id="login-tooltip">
               Увійти
             </OtherLink>
           )}
@@ -44,14 +44,17 @@ const BackGround = ({ type, children }) => {
             <Tooltip id="login-tooltip" content="Увійдіть у свій обліковий запис" place="bottom" />
           )}
         </HeadBox>
+
         {children}
       </FormBox>
-      {type === "login" ? (
-        <WelcomeBox>
-          <CenterElement>
-            <WelcomeText>З поверненням!</WelcomeText>
-            <WelcomeDescription>Введіть свої персональні дані і розпочніть подорож з нами</WelcomeDescription>
 
+      {type === "login" ? (
+        <WelcomeBox role="region" aria-labelledby="welcome-title">
+          <CenterElement>
+
+            <WelcomeText id="welcome-title">З поверненням!</WelcomeText>
+
+            <WelcomeDescription>Введіть свої персональні дані і розпочніть подорож з нами</WelcomeDescription>
             <LinkButton to="/registration" data-tooltip-id="register-tooltip">
               Зареєструватися
             </LinkButton>
@@ -65,7 +68,6 @@ const BackGround = ({ type, children }) => {
             <WelcomeDescription>
               Щоб залишатися на зв'язку з нами, увійдіть, використовуючи свої особисті дані
             </WelcomeDescription>
-
             <LinkButton to="/login" data-tooltip-id="login-btn-tooltip">
               Увійти
             </LinkButton>

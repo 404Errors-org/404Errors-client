@@ -40,14 +40,15 @@ const LocationModal = ({ onChangeLocation }) => {
   ];
 
   return (
-    <Modal>
+    <Modal role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDescription">
       <HeadWrapper>
         <ModalTitle data-tooltip-id="location-title-tooltip">Локації</ModalTitle>
         <Tooltip id="location-title-tooltip" content="Виберіть тип локацій для пошуку" place="top" float={true} />
         <CloseBtn onClick={onChangeLocation} data-tooltip-id="close-button-tooltip" />
         <Tooltip id="close-button-tooltip" content="Закрити вікно" place="left" />
       </HeadWrapper>
-      <LocationList>
+
+      <LocationList aria-labelledby="categoriesTitle" id="categoriesTitle">
         {categories.map((category) => (
           <Label
             key={category.value}
@@ -56,16 +57,24 @@ const LocationModal = ({ onChangeLocation }) => {
           >
             <Checkbox
               type="checkbox"
-              checked={selectedCategories.includes(category.value)}
+              aria-checked={selectedCategories.includes(category.value)}
               onChange={() => handlePlaces(category.value)}
+              aria-labelledby={`category-${category.value}-label`}
             />
             <CustomCheckbox />
-            <img src={`/icons/${category.value}.svg`} alt={`${category.label} icon`} width="20px" height="20px" />
-            {category.label}
+            <img
+              src={`/icons/${category.value}.svg`}
+              alt={`${category.label} icon`}
+              width="20px"
+              height="20px"
+              aria-hidden="true"
+            />
+            <span id={`category-${category.value}-label`}>{category.label}</span>
             <Tooltip id={`category-tooltip-${category.value}`} place="top" />
           </Label>
         ))}
       </LocationList>
+
       <ModalTitle data-tooltip-id="filter-tooltip" marginTop="18px">
         Додаткові фільтри
       </ModalTitle>
@@ -79,8 +88,9 @@ const LocationModal = ({ onChangeLocation }) => {
           >
             <Checkbox
               type="checkbox"
-              checked={selectedFilters.includes(filter.value)}
+              aria-checked={selectedFilters.includes(filter.value)}
               onChange={() => handleFilters(filter.value)}
+              aria-labelledby={`filter-${filter.value}-label`}
             />
             <CustomCheckbox />
             <img src={`/icons/${filter.value}.svg`} alt={`${filter.label} icon`} width="20px" height="20px" />
