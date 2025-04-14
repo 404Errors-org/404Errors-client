@@ -408,7 +408,7 @@ const Map = () => {
         document.head.removeChild(styleElement);
       }
     };
-  }, [mapLoaded, locationVersion, selectedCategories, categoryValues]);
+  }, [mapLoaded, locationVersion, locations]);
 
   const handleClear = useCallback(() => {
     startCoordsRef.current = null;
