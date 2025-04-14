@@ -1,17 +1,37 @@
+import axios from "axios";
+
+const BASE_URL = "https://404errors-server-production.up.railway.app";
+
 export const sendSuggestion = async (locationId, suggestionText, token) => {
-    const response = await fetch(`https://404errors-server-production.up.railway.app/suggestions?locationId=${locationId}`, {
-      method: 'POST',
+  const response = await axios.fetch(`${BASE_URL}=${locationId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ content: suggestionText }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Помилка при відправленні пропозиції");
+  }
+
+  return await response.json();
+};
+export const getSuggestionsByLocation = async (locationId, token, signal) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/suggestions/location/${locationId}`, {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: token ? `Bearer ${token}` : undefined,
       },
-      body: JSON.stringify({ content: suggestionText }),
+      signal: signal,
     });
-  
-    if (!response.ok) {
-      throw new Error("Помилка при відправленні пропозиції");
+    return response.data;
+  } catch (error) {
+    if (axios.isCancel(error)) {
+      return [];
     }
-  
-    return await response.json();
-  };
-  
+    console.error("Помилка при отриманні пропозицій:", error);
+    throw error;
+  }
+};

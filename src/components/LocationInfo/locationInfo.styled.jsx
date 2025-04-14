@@ -5,10 +5,27 @@ export const Modal = styled.div`
   width: 410px;
   top: 90px;
   left: 20px;
+  max-height: calc(100vh - 120px); /* Limit maximum height to viewport minus margins */
+  overflow-y: auto; /* Enable vertical scrolling */
   background-color: ${(props) => props.theme.colors.white};
   padding: 24px 16px;
   border-radius: 12px;
   z-index: 999;
+  scrollbar-width: thin; /* For Firefox */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #7ccdcd;
+  }
 `;
 
 export const InfoTitle = styled.p`
@@ -70,7 +87,6 @@ export const IconSave = styled.img`
 `;
 
 export const FeedbacksSection = styled.div`
-  margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid #eee;
 `;

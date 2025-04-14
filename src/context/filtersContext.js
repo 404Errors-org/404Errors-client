@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { getLocations } from "../services/locations";
 import PropTypes from "prop-types";
 
@@ -11,41 +11,30 @@ export const FiltersProvider = ({ children }) => {
   const [locations, setLocations] = useState({ type: "FeatureCollection", features: [] });
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+  const initialLoadRef = useRef(true);
+  const isUpdatingURLRef = useRef(false);
 
   useEffect(() => {
-    const isPageRefresh = performance.navigation && performance.navigation.type === 1;
+    if (initialLoadRef.current) {
+      initialLoadRef.current = false;
 
-    const isPageReload =
-      window.performance &&
-      window.performance.getEntriesByType &&
-      window.performance.getEntriesByType("navigation").length > 0 &&
-      window.performance.getEntriesByType("navigation")[0].type === "reload";
+      const urlCategories = searchParams.get("categories");
+      const urlTags = searchParams.get("tags") || searchParams.get("filters");
 
-    if (isPageRefresh || isPageReload) {
-      navigate(window.location.pathname, { replace: true });
+      const initialCategories = parseQueryParam(urlCategories);
+      const initialFilters = parseQueryParam(urlTags);
 
-      setSelectedCategories([]);
-      setSelectedFilters([]);
+      if (initialCategories.length > 0) {
+        setSelectedCategories(initialCategories);
+      }
 
-      fetchLocations([], []);
-    } else {
-      processUrlParameters();
+      if (initialFilters.length > 0) {
+        setSelectedFilters(initialFilters);
+      }
+
+      fetchLocations(initialFilters, initialCategories);
     }
   }, []);
-
-  const processUrlParameters = () => {
-    const categoriesFromQuery = searchParams.get("categories");
-    const filtersFromQuery = searchParams.get("filters") || searchParams.get("tags");
-
-    const parsedCategories = parseQueryParam(categoriesFromQuery);
-    const parsedFilters = parseQueryParam(filtersFromQuery);
-
-    setSelectedCategories(parsedCategories);
-    setSelectedFilters(parsedFilters);
-
-    fetchLocations(parsedFilters, parsedCategories);
-  };
 
   const fetchLocations = (filters = [], categories = []) => {
     setIsLoading(true);
@@ -84,36 +73,27 @@ export const FiltersProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (isLoading) return;
+    if (initialLoadRef.current || isLoading || isUpdatingURLRef.current) return;
 
-    const params = new URLSearchParams(searchParams);
+    isUpdatingURLRef.current = true;
 
-    if (selectedFilters.length > 0) {
-      params.set("tags", JSON.stringify(selectedFilters));
-    } else {
-      params.delete("tags");
-    }
-
-    setSearchParams(params);
-
-    fetchLocations(selectedFilters, selectedCategories);
-  }, [selectedFilters]);
-
-  useEffect(() => {
-    if (isLoading) return;
-
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams();
 
     if (selectedCategories.length > 0) {
       params.set("categories", JSON.stringify(selectedCategories));
-    } else {
-      params.delete("categories");
     }
 
-    setSearchParams(params);
+    if (selectedFilters.length > 0) {
+      params.set("tags", JSON.stringify(selectedFilters));
+    }
 
+    setSearchParams(params, { replace: true });
     fetchLocations(selectedFilters, selectedCategories);
-  }, [selectedCategories]);
+
+    setTimeout(() => {
+      isUpdatingURLRef.current = false;
+    }, 100);
+  }, [selectedFilters, selectedCategories]);
 
   const handleFilters = (value) => {
     setSelectedFilters((prevSelected) => {
