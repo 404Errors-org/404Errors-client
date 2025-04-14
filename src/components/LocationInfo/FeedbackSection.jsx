@@ -12,9 +12,9 @@ import {
   InfoTitle,
 } from "./locationInfo.styled";
 import { StarContainer } from "../LocationModal/locationModal.styled";
-import { getFeedbacksByLocation, handleAddFeedback } from "../../services/feedback";
+import { getFeedbacksByLocation, handleAddFeedback, getLocationRating } from "../../services/feedback";
 
-const FeedbackSection = ({ Info, user }) => {
+const FeedbackSection = ({ Info, user, locationRating: initialRating = 0 }) => {
   const [loading, setLoading] = useState(false);
   const [feedbacksLoading, setFeedbacksLoading] = useState(true);
   const [feedbacks, setFeedbacks] = useState([]);
@@ -23,6 +23,46 @@ const FeedbackSection = ({ Info, user }) => {
   const [error, setError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [userFeedback, setUserFeedback] = useState(null);
+  const [locationRating, setLocationRating] = useState(initialRating);
+  const [ratingLoading, setRatingLoading] = useState(false);
+
+  const renderStars = (value, maxStars = 5) => {
+    return (
+      <div style={{ display: "flex", marginBottom: "10px", alignItems: "center" }}>
+        {[...Array(maxStars)].map((_, index) => (
+          <span
+            key={index}
+            style={{
+              color: index < value ? "gold" : "#ccc",
+              fontSize: "22px",
+              marginRight: "3px",
+            }}
+          >
+            ★
+          </span>
+        ))}
+        <span style={{ marginLeft: "5px", color: "#666", fontSize: "16px" }}>
+          ({value} з {maxStars})
+        </span>
+      </div>
+    );
+  };
+
+  const fetchLocationRating = async () => {
+    if (!Info?.id) return;
+
+    setRatingLoading(true);
+    try {
+      const locationData = await getLocationRating(Info.id);
+      if (locationData && locationData.rating !== undefined) {
+        setLocationRating(locationData.rating);
+      }
+    } catch (error) {
+      console.error("Error fetching location rating:", error);
+    } finally {
+      setRatingLoading(false);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -50,6 +90,8 @@ const FeedbackSection = ({ Info, user }) => {
           }
         }
 
+        fetchLocationRating();
+
         setError(null);
       } catch (error) {
         if (!isMounted || error.name === "AbortError") return;
@@ -69,6 +111,12 @@ const FeedbackSection = ({ Info, user }) => {
       controller.abort();
     };
   }, [Info?.id, user, submitSuccess]);
+
+  useEffect(() => {
+    if (initialRating > 0) {
+      setLocationRating(initialRating);
+    }
+  }, [initialRating]);
 
   const isFeedbackDisabled =
     userFeedback !== null ||
@@ -93,7 +141,7 @@ const FeedbackSection = ({ Info, user }) => {
         throw new Error("ID локації відсутній");
       }
 
-      await handleAddFeedback(
+      const response = await handleAddFeedback(
         e,
         user,
         feedbacks,
@@ -120,6 +168,8 @@ const FeedbackSection = ({ Info, user }) => {
         date: new Date().toLocaleString(),
       };
       setUserFeedback(newUserFeedback);
+
+      await fetchLocationRating();
     } catch (err) {
       if (
         err.response &&
@@ -151,6 +201,19 @@ const FeedbackSection = ({ Info, user }) => {
   return (
     <FeedbacksSection>
       <InfoTitle>Відгуки:</InfoTitle>
+      {ratingLoading || feedbacksLoading ? (
+        <p style={{ textAlign: "center", padding: "10px" }}>Обчислення середнього рейтингу...</p>
+      ) : (
+        <div>
+          {locationRating > 0 && (
+            <div style={{ marginBottom: "20px", backgroundColor: "#f5f5f5", padding: "10px", borderRadius: "8px" }}>
+              <div style={{ fontWeight: "500", marginBottom: "5px" }}>Загальний рейтинг закладу:</div>
+              {renderStars(locationRating)}
+            </div>
+          )}
+        </div>
+      )}
+
       <div style={{ maxHeight: "200px", overflowY: "auto", marginBottom: "15px" }}>
         {feedbacksLoading ? (
           <div style={{ textAlign: "center", padding: "10px" }}>
@@ -224,8 +287,8 @@ const FeedbackSection = ({ Info, user }) => {
           <FeedbackButton
             type="submit"
             disabled={isFeedbackDisabled || loading}
-            isDisabled={isFeedbackDisabled}
-            isLoading={loading}
+            $isDisabled={isFeedbackDisabled}
+            $isLoading={loading}
           >
             {isFeedbackDisabled ? "Відгук додано" : loading ? "Надсилання..." : "Додати відгук"}
           </FeedbackButton>
@@ -240,6 +303,7 @@ FeedbackSection.propTypes = {
     id: PropTypes.string.isRequired,
   }).isRequired,
   user: PropTypes.object,
+  locationRating: PropTypes.number,
 };
 
 export default FeedbackSection;

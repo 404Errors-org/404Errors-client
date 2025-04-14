@@ -14,6 +14,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
   const [showSuggestionModal, setShowSuggestionModal] = useState(false);
   const [suggestionText, setSuggestionText] = useState("");
   const [locations, setLocations] = useState([]);
+  const [locationRating, setLocationRating] = useState(0);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -26,6 +27,13 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
         const response = await getLocations([], [], signal);
         if (isMounted && !signal.aborted && response && response.data) {
           setLocations(response.data);
+
+          if (Info?.id) {
+            const currentLocation = response.data.find((location) => location.id === Info.id);
+            if (currentLocation && currentLocation.rating !== undefined) {
+              setLocationRating(currentLocation.rating);
+            }
+          }
         }
       } catch (error) {
         if (!signal.aborted && error.name !== "AbortError" && isMounted) {
@@ -40,7 +48,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [Info?.id]);
 
   return (
     <Modal aria-labelledby="modal-title" aria-hidden="false">
@@ -72,7 +80,7 @@ const LocationInfo = ({ Info, onChangeInfo }) => {
       <LocationDetails Info={Info} />
       <AccessibilitySection Info={Info} user={user} locations={locations} />
       <SuggestionSection Info={Info} user={user} />
-      <FeedbackSection Info={Info} user={user} />
+      <FeedbackSection Info={Info} user={user} locationRating={locationRating} />
 
       {showSuggestionModal && (
         <SuggestionModal

@@ -15,19 +15,19 @@ const handleAddFeedback = async (
   e.preventDefault();
 
   if (!user) {
-    return;
+    return null;
   }
 
   const username = user.username || "Користувач";
 
   if (feedbacks.some((feedback) => feedback.author === username)) {
-    return;
+    return null;
   }
 
   if (newFeedback.trim()) {
     if (!locationId) {
       console.error("locationId не визначений");
-      return;
+      return null;
     }
 
     try {
@@ -58,10 +58,24 @@ const handleAddFeedback = async (
         ]);
         setNewFeedback("");
         setRating(0);
+
+        return response.data;
       }
     } catch (error) {
       console.error("Помилка при відправці відгуку:", error);
+      throw error;
     }
+  }
+  return null;
+};
+
+const getLocationRating = async (locationId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/locations/${locationId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Помилка при отриманні рейтингу:", error);
+    throw error;
   }
 };
 
@@ -96,4 +110,4 @@ const updateLocationTags = async (locationId, tags, token) => {
   }
 };
 
-export { handleAddFeedback, getFeedbacksByLocation, updateLocationTags };
+export { handleAddFeedback, getFeedbacksByLocation, updateLocationTags, getLocationRating };

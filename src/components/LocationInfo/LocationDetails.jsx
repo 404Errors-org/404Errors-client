@@ -43,6 +43,7 @@ LocationDetails.propTypes = {
   Info: PropTypes.shape({
     location: PropTypes.string,
     phone: PropTypes.string,
+    rating: PropTypes.number,
   }).isRequired,
 };
 

@@ -20,6 +20,7 @@ const AccessibilitySection = ({ Info, user, locations }) => {
   const [tagUpdateError, setTagUpdateError] = useState(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [currentLocationTags, setCurrentLocationTags] = useState([]);
+  const [accessibilityRate, setAccessibilityRate] = useState(0);
 
   const tagToFeatureName = {
     ramp: "Пандуси",
@@ -52,14 +53,21 @@ const AccessibilitySection = ({ Info, user, locations }) => {
       if (locations.length > 0) {
         const currentLocation = locations.find((location) => location.id === Info.id);
 
-        if (currentLocation && Array.isArray(currentLocation.tags)) {
-          setCurrentLocationTags(currentLocation.tags);
+        if (currentLocation) {
+          if (Array.isArray(currentLocation.tags)) {
+            setCurrentLocationTags(currentLocation.tags);
 
-          const initialFeatures = {};
-          Object.keys(tagToFeatureName).forEach((tag) => {
-            initialFeatures[tag] = currentLocation.tags.includes(tag);
-          });
-          setFeatures(initialFeatures);
+            const initialFeatures = {};
+            Object.keys(tagToFeatureName).forEach((tag) => {
+              initialFeatures[tag] = currentLocation.tags.includes(tag);
+            });
+            setFeatures(initialFeatures);
+          }
+
+          if (currentLocation.accessibilityRate !== undefined) {
+            setAccessibilityRate(currentLocation.accessibilityRate);
+          }
+
           return true;
         }
       }
@@ -103,6 +111,28 @@ const AccessibilitySection = ({ Info, user, locations }) => {
     }
   };
 
+  const renderStars = (value, maxStars = 5) => {
+    return (
+      <div style={{ display: "flex", marginBottom: "10px", alignItems: "center" }}>
+        {[...Array(maxStars)].map((_, index) => (
+          <span
+            key={index}
+            style={{
+              color: index < value ? "gold" : "#ccc",
+              fontSize: "22px",
+              marginRight: "3px",
+            }}
+          >
+            ★
+          </span>
+        ))}
+        <span style={{ marginLeft: "5px", color: "#666", fontSize: "16px" }}>
+          ({value} з {maxStars})
+        </span>
+      </div>
+    );
+  };
+
   return (
     <StyledAccessibilitySection>
       <InfoTitle data-tooltip-id="desc-accessibility">Рейтинг доступності закладу:</InfoTitle>
@@ -115,6 +145,16 @@ const AccessibilitySection = ({ Info, user, locations }) => {
             : "Цю секцію можуть змінювати лише користувачі, які підтвердили свою інвалідність"
         }
       />
+
+      <div style={{ margin: "15px 0" }}>
+        {accessibilityRate > 0 && (
+          <div>
+            <div style={{ fontWeight: "500", marginBottom: "5px" }}>Рейтинг доступності:</div>
+            {renderStars(accessibilityRate)}
+          </div>
+        )}
+      </div>
+
       {tagUpdateError && (
         <div
           style={{
@@ -153,12 +193,14 @@ const AccessibilitySection = ({ Info, user, locations }) => {
                 checked={editing ? features?.[tag] || false : isTagPresent || false}
                 onChange={() => editing && toggleFeature(tag)}
                 readOnly={!editing}
+                aria-label={label}
               />
               <AccessibilityLabel htmlFor={tag}>{label}</AccessibilityLabel>
             </AccessibilityItem>
           );
         })}
       </AccessibilityContainer>
+      <div>{}</div>
 
       {editing && (
         <form onSubmit={handleSave}>
