@@ -15,10 +15,6 @@ export const getLocations = async (filtersArray = [], categoriesArray = [], sign
     clearTimeout(debounceTimer);
   }
 
-  if (locationsCache.data && Date.now() - locationsCache.timestamp < locationsCache.expiresIn) {
-    return locationsCache.data;
-  }
-
   return new Promise((resolve) => {
     debounceTimer = setTimeout(async () => {
       try {

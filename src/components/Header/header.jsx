@@ -11,8 +11,8 @@ const Header = ({ onLocationClick }) => {
       <HeaderContainer>
         <Wrapper>
           <img src="/icons/logo.png" alt="logo" width={65} height={65} aria-label="Логотип компанії" />
-          <Link data-tooltip-id="filters-tooltip" onClick={onLocationClick} marginLeft="50px" aria-label="Відкрити локації">
-            Локації
+          <Link data-tooltip-id="filters-tooltip" onClick={onLocationClick} marginLeft="50px" aria-label="Відкрити фільтри">
+            Фільтри
             <Tooltip id="filters-tooltip" content="Виберіть фільтри для пошуку" place="bottom" />
           </Link>
         </Wrapper>

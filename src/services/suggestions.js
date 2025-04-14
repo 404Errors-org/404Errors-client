@@ -3,21 +3,27 @@ import axios from "axios";
 const BASE_URL = "https://404errors-server-production.up.railway.app";
 
 export const sendSuggestion = async (locationId, suggestionText, token) => {
-  const response = await axios.fetch(`${BASE_URL}=${locationId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ content: suggestionText }),
-  });
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/suggestions?locationId=${locationId}`,
+      {
+        content: suggestionText,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Помилка при відправленні пропозиції");
+    return response.data;
+  } catch (error) {
+    console.error("Помилка при відправленні пропозиції:", error);
+    throw new Error("Не вдалося відправити пропозицію");
   }
-
-  return await response.json();
 };
+
 export const getSuggestionsByLocation = async (locationId, token, signal) => {
   try {
     const response = await axios.get(`${BASE_URL}/suggestions/location/${locationId}`, {

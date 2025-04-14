@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Checkbox,
   CloseBtn,
@@ -58,23 +58,17 @@ const LocationModal = ({ onChangeLocation }) => {
             <Checkbox
               type="checkbox"
               aria-checked={selectedCategories.includes(category.value)}
+              checked={selectedCategories.includes(category.value)}
               onChange={() => handlePlaces(category.value)}
               aria-labelledby={`category-${category.value}-label`}
             />
             <CustomCheckbox />
-            <img
-              src={`/icons/${category.value}.svg`}
-              alt={`${category.label} icon`}
-              width="20px"
-              height="20px"
-              aria-hidden="true"
-            />
+            <img src={`/icons/${category.value}.svg`} alt={`${category.label} icon`} width="20px" height="20px" aria-hidden="true" />
             <span id={`category-${category.value}-label`}>{category.label}</span>
             <Tooltip id={`category-tooltip-${category.value}`} place="top" />
           </Label>
         ))}
       </LocationList>
-
       <ModalTitle data-tooltip-id="filter-tooltip" marginTop="18px">
         Додаткові фільтри
       </ModalTitle>
@@ -89,6 +83,7 @@ const LocationModal = ({ onChangeLocation }) => {
             <Checkbox
               type="checkbox"
               aria-checked={selectedFilters.includes(filter.value)}
+              checked={selectedFilters.includes(filter.value)}
               onChange={() => handleFilters(filter.value)}
               aria-labelledby={`filter-${filter.value}-label`}
             />
