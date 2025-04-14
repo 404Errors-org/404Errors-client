@@ -6,6 +6,7 @@ import ConfirmForm from "../ConfirmForm/confirm";
 import { registerUser } from "../../services/register";
 import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
+import { CheckboxLabel, DocCheckbox, DocWrapper, FileInput, FileInputWrapper } from "./registerForm.styled";
 
 const SUPPORTED_FORMATS = ["application/pdf", "image/jpeg", "image/png"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -65,7 +66,7 @@ const RegisterForm = () => {
       {approve ? (
         <ConfirmForm type={"register"} />
       ) : (
-        <FormWrapper marginTop="100px">
+        <FormWrapper marginTop="100px" marginTopMedium="50px" marginTopExtraSmall="40px">
           <TitleForm>Вітаємо на нашому сайті</TitleForm>
           <Formik
             initialValues={{
@@ -119,38 +120,16 @@ const RegisterForm = () => {
                 <Tooltip id="repeat-password-tooltip" content="Повторіть пароль для підтвердження" />
                 <FormError name="repeatPassword" />
 
-                <div style={{ margin: "20px 0" }}>
-                  <label
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      fontSize: "16px",
-                      cursor: "pointer",
-                    }}
-                    data-tooltip-id="disabled-tooltip"
-                  >
-                    <Field
-                      type="checkbox"
-                      name="isDisabled"
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        accentColor: "#007BFF",
-                        cursor: "pointer",
-                      }}
-                    />
+                <DocWrapper>
+                  <CheckboxLabel data-tooltip-id="disabled-tooltip">
+                    <DocCheckbox type="checkbox" name="isDisabled" />
                     Прикріпіть документ про інвалідність
-                  </label>
-                  <Tooltip
-                    id="disabled-tooltip"
-                    content="Виберіть, якщо у вас є документ про інвалідність"
-                    place="top"
-                  />
+                  </CheckboxLabel>
+                  <Tooltip id="disabled-tooltip" content="Є документ про інвалідність?" place="top" />
 
                   {values.isDisabled && (
-                    <div style={{ marginTop: "15px" }}>
-                      <input
+                    <FileInputWrapper>
+                      <FileInput
                         type="file"
                         name="disabilityFile"
                         accept=".pdf,.jpg,.jpeg,.png"
@@ -159,19 +138,18 @@ const RegisterForm = () => {
                           setFieldValue("disabilityFile", file);
                           setIsFileSelected(!!file);
                         }}
-                        style={{
-                          fontSize: "16px",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: `1px solid ${isFileSelected ? "#00bcd4" : "#ccc"}`,
-                        }}
+                        isSelected={isFileSelected}
                       />
                       <FormError name="disabilityFile" />
-                    </div>
+                    </FileInputWrapper>
                   )}
-                </div>
-                
-                <ButtonSubmit type="submit" data-tooltip-id="register-button-tooltip" disabled={!isValid || Object.keys(touched).length === 0}>
+                </DocWrapper>
+
+                <ButtonSubmit
+                  type="submit"
+                  data-tooltip-id="register-button-tooltip"
+                  disabled={!isValid || Object.keys(touched).length === 0}
+                >
                   Зареєструватися
                 </ButtonSubmit>
                 <Tooltip

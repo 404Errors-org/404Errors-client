@@ -86,3 +86,22 @@ body {
 .react-tooltip-arrow {
   background-color: transparent !important;
 }
+
+.mapboxgl-ctrl .mapboxgl-ctrl-attrib .mapboxgl-compact {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mapboxgl-ctrl-geocoder--input {
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  .point .mapboxgl-ctrl-geocoder--input {
+    background-size: 16px;
+  }
+
+  .search .mapboxgl-ctrl-geocoder--input {
+    background-size: 16px;
+  }
+}
